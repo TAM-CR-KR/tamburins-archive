@@ -113,7 +113,7 @@ function applyTransform(){stage.style.transform=`translate(${innerWidth/2+panX}p
 function resetView(){zoom=1;panX=0;panY=0;applyTransform();}
 function clearStage(){nodeEls.forEach(n=>n.el.remove());nodeEls=[];svg.innerHTML='';lineN=0;}
 function place(el,x,y){el.style.left=x+'px';el.style.top=y+'px';stage.appendChild(el);nodeEls.push({el,x,y});}
-function line(){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',0);l.setAttribute('y1',0);l.setAttribute('x2',0);l.setAttribute('y2',0);svg.appendChild(l);lineN++;}
+function line(x,y){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',0);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',y);svg.appendChild(l);}
 function pdisc(p){return `<div class="disc">${p.img?`<img src="${p.img}">`:`<span class="ph">${esc((p.en||'T')[0])}</span>`}</div>`;}
 
 function showHome(){
@@ -142,7 +142,7 @@ function openScent(s){
     const el=document.createElement('div');el.className='node pnode';
     el.innerHTML=pdisc(p)+`<div class="lbl">${esc(p.en)}</div>`;
     el.onclick=()=>openProduct(id);
-    line();place(el,x,y);
+    line(x,y);place(el,x,y);
   });
   applyTransform();updateCrumb();
 }
@@ -170,9 +170,6 @@ function updateCrumb(){
   const ch=document.getElementById('c_home');if(ch)ch.onclick=showHome;
   const cs=document.getElementById('c_scent');if(cs)cs.onclick=()=>openScent(curScent);
 }
-// line follow
-function tick(){let li=0;for(let i=1;i<nodeEls.length;i++){const n=nodeEls[i];const L=svg.children[li];if(L){L.setAttribute('x2',n.el.offsetLeft);L.setAttribute('y2',n.el.offsetTop);li++;}}requestAnimationFrame(tick);}
-requestAnimationFrame(tick);
 // pan/zoom
 let dragging=false,sx,sy,spx,spy;
 vp.addEventListener('mousedown',e=>{dragging=true;sx=e.clientX;sy=e.clientY;spx=panX;spy=panY;vp.classList.add('drag');});
