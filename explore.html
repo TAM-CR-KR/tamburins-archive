@@ -110,6 +110,8 @@ const DATA={"products": [{"en": "Chamo", "kr": "카모", "bigcat": "판매중", 
 const PASS="tamburins";
 const P=DATA.products; P.forEach((p,i)=>p.id=i);
 const SF=DATA.scentFams, SK=DATA.scentKw||{}, FAM_ORDER=DATA.famOrder;
+const UI=Object.assign({title:'Fragrance Map',subtitle:'탬버린즈 향 맵 · 계열별로 향을 만나보세요'},DATA.ui||{});
+const FL=DATA.famLabels||{};
 const esc=s=>(s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const esc2=s=>esc(s).replace(/"/g,"&quot;");
 const byScent={};
@@ -141,13 +143,12 @@ function navigate(st,push){
 window.addEventListener('popstate',e=>{if(e.state)navigate(e.state,false);else navigate({view:'home',mode:MODE},false);});
 function syncMode(){document.querySelectorAll('#modeT button').forEach(b=>b.classList.toggle('on',b.dataset.m===MODE));}
 function renderHome(){
-  homeEl.classList.add('on');vp.classList.remove('on');hint.classList.add('hide');document.getElementById('edit').style.display=EDIT?'block':'none';
-  if(EDIT)document.getElementById('edit').innerHTML='<div style="font-size:12px;color:#9a9a97">향을 클릭하면 향 키워드를, 제품을 클릭하면 제품 정보를 편집할 수 있습니다.</div>';
+  homeEl.classList.add('on');vp.classList.remove('on');hint.classList.add('hide');
   const vis=Object.keys(byScent).filter(s=>scentVisible(s,MODE));
   const g={};vis.forEach(s=>(SF[s]||["그 외"]).forEach(f=>{(g[f]=g[f]||[]).push(s);}));
   const order=FAM_ORDER.filter(f=>g[f]&&g[f].length);Object.keys(g).forEach(f=>{if(!order.includes(f))order.push(f);});
-  homeEl.innerHTML=`<div class="hhead"><h1 class="ttl">Fragrance Map</h1><p>탬버린즈 향 맵 · ${MODE==='판매중'?'판매중 향을 계열별로 만나보세요':'단종(아카이브) 향 모음'}</p></div>`+
-    (order.length?`<div class="fams">${order.map(f=>`<div class="fam"><h3>${esc(f)}</h3><div class="chips">${[...new Set(g[f])].sort().map(s=>`<span class="sc" data-s="${esc2(s)}">${esc(s)}</span>`).join('')}</div></div>`).join('')}</div>`
+  homeEl.innerHTML=`<div class="hhead"><h1 class="ttl">${esc(UI.title)}</h1><p>${esc(UI.subtitle)}</p></div>`+
+    (order.length?`<div class="fams">${order.map(f=>`<div class="fam"><h3>${esc(FL[f]||f)}</h3><div class="chips">${[...new Set(g[f])].sort().map(s=>`<span class="sc" data-s="${esc2(s)}">${esc(s)}</span>`).join('')}</div></div>`).join('')}</div>`
       :`<div class="emptyf">해당 분류의 향이 없습니다.</div>`);
   homeEl.querySelectorAll('.sc').forEach(c=>c.onclick=()=>navigate({view:'scent',scent:c.dataset.s,mode:MODE},true));
   updateCrumb('home');
@@ -225,6 +226,19 @@ function curState(){return history.state||{view:'home',mode:MODE};}
 function renderEdit(){
   const box=document.getElementById('edit');if(!EDIT){box.style.display='none';return;}
   const st=curState();box.style.display='block';
+  if(st.view==='home'){
+    const vis=Object.keys(byScent).filter(x=>scentVisible(x,MODE));
+    const fams=[];vis.forEach(x=>(SF[x]||['그 외']).forEach(f=>{if(!fams.includes(f))fams.push(f);}));
+    fams.sort((a,b)=>FAM_ORDER.indexOf(a)-FAM_ORDER.indexOf(b));
+    box.innerHTML=`<h4>메인 화면 편집</h4>
+     <div class="el">페이지 타이틀</div><input id="u_title" value="${esc2(UI.title)}">
+     <div class="el">부제 · 설명</div><input id="u_sub" value="${esc2(UI.subtitle)}">
+     <div class="el">계열 이름 (${MODE})</div>${fams.map(f=>`<div class="kwrow"><span style="min-width:0;font-size:10px;color:#9a9a97;align-self:center;white-space:nowrap;">${esc(f)}→</span><input data-fam="${esc2(f)}" value="${esc2(FL[f]||f)}"></div>`).join('')}
+     <div class="ea"><button class="save" id="e_save">적용</button><button id="e_close">닫기</button></div>`;
+    box.querySelector('#e_save').onclick=()=>{readHome();navigate(curState(),false);};
+    box.querySelector('#e_close').onclick=()=>{box.style.display='none';};
+    return;
+  }
   if(st.view==='scent'){
     const s=st.scent; if(!SK[s])SK[s]=[];
     box.innerHTML=`<h4>향 키워드 · ${esc(s)}</h4><div style="font-size:11px;color:#9a9a97">키워드 · 크기 레벨(1~10) — 이 화면에서만 조절/표시됩니다</div>
@@ -254,6 +268,7 @@ function renderEdit(){
   box.querySelector('#e_save').onclick=()=>{readProd();navigate(curState(),false);};
   box.querySelector('#e_close').onclick=()=>{box.style.display='none';};
 }
+function readHome(){const t=document.getElementById('u_title');if(t)UI.title=t.value;const u=document.getElementById('u_sub');if(u)UI.subtitle=u.value;document.querySelectorAll('[data-fam]').forEach(inp=>{const f=inp.dataset.fam,v=inp.value.trim();if(v&&v!==f)FL[f]=v;else delete FL[f];});}
 function readScent(s){const ins=[...document.querySelectorAll('#e_kws input')];SK[s]=ins.map((inp,i)=>({t:inp.value,s:(SK[s][i]?SK[s][i].s:1)}));}
 function readProd(){const st=curState();if(st.view!=='product')return;const p=P[st.prod];
   const en=document.getElementById('e_en');if(en)p.en=en.value;const kr=document.getElementById('e_kr');if(kr)p.kr=kr.value;
@@ -261,7 +276,7 @@ function readProd(){const st=curState();if(st.view!=='product')return;const p=P[
 function resizeImg(file,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{let w=im.width,h=im.height;const m=Math.max(w,h);if(m>760){const s=760/m;w=Math.round(w*s);h=Math.round(h*s);}const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(im,0,0,w,h);cb(cv.toDataURL('image/jpeg',0.82));};im.src=r.result;};r.readAsDataURL(file);}
 function exportHTML(){
   const st=curState();if(st.view==='product')readProd();if(st.view==='scent')readScent(st.scent);
-  const SKx={};Object.keys(SK).forEach(k=>{SKx[k]=SK[k].filter(o=>o.t&&o.t.trim());});const json=JSON.stringify({products:P.map(p=>{const{id,...r}=p;return r;}),scentFams:SF,scentKw:SKx,famOrder:FAM_ORDER});
+  const SKx={};Object.keys(SK).forEach(k=>{SKx[k]=SK[k].filter(o=>o.t&&o.t.trim());});const json=JSON.stringify({products:P.map(p=>{const{id,...r}=p;return r;}),scentFams:SF,scentKw:SKx,famOrder:FAM_ORDER,ui:UI,famLabels:FL});
   const m1="const DATA=",m2=";\nconst PASS=";const a=SRC0.indexOf(m1),b=SRC0.indexOf(m2);
   const out=SRC0.slice(0,a)+m1+json+SRC0.slice(b);
   const blob=new Blob([out],{type:"text/html;charset=utf-8"});const u=URL.createObjectURL(blob);
