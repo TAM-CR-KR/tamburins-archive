@@ -43,6 +43,10 @@ padding:12px 18px;background:rgba(244,244,242,.93);backdrop-filter:blur(8px);bor
 #stage{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;}
 #lines{position:absolute;left:0;top:0;overflow:visible;pointer-events:none;}
 #lines line{stroke:#c7c7c3;stroke-width:1.2;}
+#lines line.kwln{stroke:#d9d9d5;stroke-width:1;stroke-dasharray:3 4;}
+.kwnode{background:#fff;border:1px solid var(--ink);border-radius:999px;padding:5px 13px;font-weight:500;z-index:4;transition:font-size .2s ease,transform .18s ease,background .15s;white-space:nowrap;}
+.kwnode:hover{background:var(--ink);color:#fff;}
+.kwnode.pop{transform:translate(-50%,-50%) scale(1.2);}
 .node{position:absolute;transform:translate(-50%,-50%);transition:opacity .35s;cursor:pointer;text-align:center;}
 .pnode .disc{width:66px;height:66px;border-radius:50%;overflow:hidden;border:2px solid #fff;box-shadow:0 3px 12px rgba(0,0,0,.14);background:#eee;margin:0 auto;display:flex;align-items:center;justify-content:center;}
 .pnode .disc img{width:100%;height:100%;object-fit:cover;}
@@ -51,7 +55,7 @@ padding:12px 18px;background:rgba(244,244,242,.93);backdrop-filter:blur(8px);bor
 .pnode .lbl{font-size:11.5px;margin-top:6px;width:106px;line-height:1.3;margin-left:auto;margin-right:auto;}
 .pnode .dtag{font-size:8.5px;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:1px 5px;margin-top:3px;display:inline-block;}
 .scentC{z-index:5;}
-.scentC .big{font-size:20px;font-weight:600;padding:15px 26px;border-radius:18px;background:var(--dark);color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.25);letter-spacing:.03em;}
+.scentC .big{font-size:15px;font-weight:600;padding:11px 20px;border-radius:16px;background:var(--dark);color:#fff;box-shadow:0 8px 22px rgba(0,0,0,.25);letter-spacing:.03em;}
 .scentC .sub{font-size:10px;letter-spacing:.14em;color:var(--muted);margin-bottom:7px;}
 .scentC .cnt{font-size:11px;color:var(--muted);margin-top:8px;}
 .skw{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px;max-width:280px;margin-left:auto;margin-right:auto;}
@@ -113,9 +117,12 @@ function applyTransform(){stage.style.transform=`translate(${innerWidth/2+panX}p
 function resetView(){zoom=1;panX=0;panY=0;applyTransform();}
 function clearStage(){nodeEls.forEach(n=>n.el.remove());nodeEls=[];svg.innerHTML='';}
 function place(el,x,y){el.style.left=x+'px';el.style.top=y+'px';stage.appendChild(el);nodeEls.push({el});}
-function line(x,y){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',0);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',y);svg.appendChild(l);}
+function line(x,y,cls){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',0);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',y);if(cls)l.setAttribute('class',cls);svg.appendChild(l);}
 function pdisc(p){return `<div class="disc">${p.img?`<img src="${p.img}">`:`<span class="ph">${esc((p.en||'T')[0])}</span>`}</div>`;}
 function scentCount(s,mode){return (byScent[s]||[]).filter(i=>P[i].bigcat===mode).length;}
+function kwCount(s,kw){try{const m=JSON.parse(localStorage.getItem('tmb_kw')||'{}');return m[s+'|'+kw]||0;}catch(e){return 0;}}
+function kwBump(s,kw){let m={};try{m=JSON.parse(localStorage.getItem('tmb_kw')||'{}');}catch(e){}const k=s+'|'+kw;m[k]=(m[k]||0)+1;try{localStorage.setItem('tmb_kw',JSON.stringify(m));}catch(e){}return m[k];}
+function kwSize(c){return (13+Math.min(c,16)*1.8);}
 function navigate(st,push){
   MODE=st.mode||MODE;
   if(st.view==='home')renderHome();
@@ -144,15 +151,24 @@ function renderScent(s){
   let list=(byScent[s]||[]).filter(i=>P[i].bigcat===MODE); if(!list.length)list=byScent[s]||[];
   const kws=SK[s]||[];
   const c=document.createElement('div');c.className='node scentC';
-  c.innerHTML=`<div class="sub ttl">SCENT</div><div class="big">${esc(s)}</div><div class="cnt">${MODE} 제품 ${list.length}개</div>`+
-    (kws.length?`<div class="skw">${kws.map(k=>`<span class="skchip">${esc(k)}</span>`).join('')}</div>`:'');
+  c.innerHTML=`<div class="sub ttl">SCENT</div><div class="big">${esc(s)}</div><div class="cnt">${MODE} 제품 ${list.length}개</div>`;
   place(c,0,0);
-  const N=list.length,R=Math.max(255,28*N);
+  const N=list.length,R=Math.max(265,30*N);
   list.forEach((id,k)=>{const t=-Math.PI/2+2*Math.PI*k/N,x=R*Math.cos(t),y=R*Math.sin(t);const p=P[id];
     const el=document.createElement('div');el.className='node pnode'+(p.bigcat==='단종'?' disc-off':'');
     el.innerHTML=pdisc(p)+`<div class="lbl">${esc(p.en)}</div>`+(p.bigcat==='단종'?'<div class="dtag">단종</div>':'');
     el.onclick=()=>navigate({view:'product',prod:id,scent:s,mode:MODE},true);
     line(x,y);place(el,x,y);});
+  // keywords scattered like a mind map
+  kws.forEach((kw,k)=>{
+    const ang=(2*Math.PI*k/Math.max(kws.length,1))+(Math.random()-0.5)*1.0;
+    const r=120+Math.random()*70;
+    const x=Math.round(r*Math.cos(ang)),y=Math.round(r*Math.sin(ang));
+    const el=document.createElement('div');el.className='node kwnode';el.textContent=kw;
+    el.style.fontSize=kwSize(kwCount(s,kw))+'px';
+    el.onclick=(ev)=>{ev.stopPropagation();const cnt=kwBump(s,kw);el.style.fontSize=kwSize(cnt)+'px';el.classList.add('pop');setTimeout(()=>el.classList.remove('pop'),200);};
+    line(x,y,'kwln');place(el,x,y);
+  });
   applyTransform();updateCrumb('scent',s);
 }
 function renderProduct(id,s){
