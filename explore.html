@@ -144,7 +144,7 @@ function renderHome(){
   const g={};vis.forEach(s=>(SF[s]||["그 외"]).forEach(f=>{(g[f]=g[f]||[]).push(s);}));
   const order=FAM_ORDER.filter(f=>g[f]&&g[f].length);Object.keys(g).forEach(f=>{if(!order.includes(f))order.push(f);});
   homeEl.innerHTML=`<div class="hhead"><h1 class="ttl">Fragrance Map</h1><p>탬버린즈 향 맵 · ${MODE==='판매중'?'판매중 향을 계열별로 만나보세요':'단종(아카이브) 향 모음'}</p></div>`+
-    (order.length?`<div class="fams">${order.map(f=>`<div class="fam"><h3>${esc(f)}</h3><div class="chips">${[...new Set(g[f])].sort().map(s=>`<span class="sc" data-s="${esc2(s)}">${esc(s)}<span class="n">${scentCount(s,MODE)}</span></span>`).join('')}</div></div>`).join('')}</div>`
+    (order.length?`<div class="fams">${order.map(f=>`<div class="fam"><h3>${esc(f)}</h3><div class="chips">${[...new Set(g[f])].sort().map(s=>`<span class="sc" data-s="${esc2(s)}">${esc(s)}</span>`).join('')}</div></div>`).join('')}</div>`
       :`<div class="emptyf">해당 분류의 향이 없습니다.</div>`);
   homeEl.querySelectorAll('.sc').forEach(c=>c.onclick=()=>navigate({view:'scent',scent:c.dataset.s,mode:MODE},true));
   updateCrumb('home');
