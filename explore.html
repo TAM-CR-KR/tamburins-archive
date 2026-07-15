@@ -131,7 +131,7 @@ function scentOnSale(s){return (byScent[s]||[]).some(i=>P[i].bigcat==='판매중
 function scentDiscPerfume(s){return (byScent[s]||[]).some(i=>P[i].bigcat==='단종'&&P[i].type==='프래그런스');}
 function scentVisible(s,mode){return mode==='판매중'?scentOnSale(s):(!scentOnSale(s)&&scentDiscPerfume(s));}
 Object.keys(SK).forEach(s=>{SK[s]=(SK[s]||[]).map(x=>typeof x==='string'?{t:x,s:1}:{t:x.t,s:(x.s||1)});});
-function szpx(lv){lv=Math.max(1,Math.min(10,lv||1));return 12+(lv-1)*3;}
+function szpx(lv){lv=Math.max(1,lv||1);return 12+(lv-1)*3;}
 function navigate(st,push){
   MODE=st.mode||MODE;
   if(st.view==='home')renderHome();
@@ -241,14 +241,14 @@ function renderEdit(){
   }
   if(st.view==='scent'){
     const s=st.scent; if(!SK[s])SK[s]=[];
-    box.innerHTML=`<h4>향 키워드 · ${esc(s)}</h4><div style="font-size:11px;color:#9a9a97">키워드 · 크기 레벨(1~10) — 이 화면에서만 조절/표시됩니다</div>
+    box.innerHTML=`<h4>향 키워드 · ${esc(s)}</h4><div style="font-size:11px;color:#9a9a97">키워드 · 크기 레벨(1~무제한) — 이 화면에서만 조절/표시됩니다</div>
      <div id="e_kws">${SK[s].map((o,i)=>`<div class="kwrow"><input value="${esc2(o.t)}" data-k="${i}"><div class="szst"><button data-dec="${i}">−</button><span class="szn">${o.s}</span><button data-inc="${i}">+</button></div><button class="rmk" data-rm="${i}">×</button></div>`).join('')}</div>
      <button class="addkw" id="e_add">+ 키워드 추가</button>
      <div class="ea"><button class="save" id="e_save">적용</button><button id="e_close">닫기</button></div>`;
     box.querySelector('#e_add').onclick=()=>{readScent(s);SK[s].push({t:'',s:1});renderEdit();};
     box.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{readScent(s);SK[s].splice(+b.dataset.rm,1);renderEdit();});
     box.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{readScent(s);const i=+b.dataset.dec;SK[s][i].s=Math.max(1,(SK[s][i].s||1)-1);renderEdit();});
-    box.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{readScent(s);const i=+b.dataset.inc;SK[s][i].s=Math.min(10,(SK[s][i].s||1)+1);renderEdit();});
+    box.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{readScent(s);const i=+b.dataset.inc;SK[s][i].s=(SK[s][i].s||1)+1;renderEdit();});
     box.querySelector('#e_save').onclick=()=>{readScent(s);navigate(curState(),false);};
     box.querySelector('#e_close').onclick=()=>{box.style.display='none';};
     return;
