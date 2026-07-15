@@ -125,6 +125,9 @@ function place(el,x,y){el.style.left=x+'px';el.style.top=y+'px';stage.appendChil
 function line(x,y,cls){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',0);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',y);if(cls)l.setAttribute('class',cls);svg.appendChild(l);}
 function pdisc(p){return `<div class="disc">${p.img?`<img src="${p.img}">`:`<span class="ph">${esc((p.en||'T')[0])}</span>`}</div>`;}
 function scentCount(s,mode){return (byScent[s]||[]).filter(i=>P[i].bigcat===mode).length;}
+function scentOnSale(s){return (byScent[s]||[]).some(i=>P[i].bigcat==='판매중');}
+function scentDiscPerfume(s){return (byScent[s]||[]).some(i=>P[i].bigcat==='단종'&&P[i].type==='프래그런스');}
+function scentVisible(s,mode){return mode==='판매중'?scentOnSale(s):(!scentOnSale(s)&&scentDiscPerfume(s));}
 Object.keys(SK).forEach(s=>{SK[s]=(SK[s]||[]).map(x=>typeof x==='string'?{t:x,s:1}:{t:x.t,s:(x.s||1)});});
 function szpx(lv){lv=Math.max(1,Math.min(10,lv||1));return 12+(lv-1)*3;}
 function navigate(st,push){
@@ -140,7 +143,7 @@ function syncMode(){document.querySelectorAll('#modeT button').forEach(b=>b.clas
 function renderHome(){
   homeEl.classList.add('on');vp.classList.remove('on');hint.classList.add('hide');document.getElementById('edit').style.display=EDIT?'block':'none';
   if(EDIT)document.getElementById('edit').innerHTML='<div style="font-size:12px;color:#9a9a97">향을 클릭하면 향 키워드를, 제품을 클릭하면 제품 정보를 편집할 수 있습니다.</div>';
-  const vis=Object.keys(byScent).filter(s=>scentCount(s,MODE)>0);
+  const vis=Object.keys(byScent).filter(s=>scentVisible(s,MODE));
   const g={};vis.forEach(s=>(SF[s]||["그 외"]).forEach(f=>{(g[f]=g[f]||[]).push(s);}));
   const order=FAM_ORDER.filter(f=>g[f]&&g[f].length);Object.keys(g).forEach(f=>{if(!order.includes(f))order.push(f);});
   homeEl.innerHTML=`<div class="hhead"><h1 class="ttl">Fragrance Map</h1><p>탬버린즈 향 맵 · ${MODE==='판매중'?'판매중 향을 계열별로 만나보세요':'단종(아카이브) 향 모음'}</p></div>`+
