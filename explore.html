@@ -133,16 +133,17 @@ function fbInit(cb){
     .then(snap=>{try{applyOverrides(snap&&snap.val?snap.val():null);}catch(e){console.warn(e);}cb&&cb();})
     .catch(e=>{console.warn('FB init 실패',e);cb&&cb();});
 }
-function fbSave(){
-  if(!fbRef){alert('클라우드 저장이 아직 설정되지 않았습니다.');return;}
+function fbSave(silent){
+  if(!fbRef){if(!silent)alert('클라우드 저장이 아직 준비되지 않았습니다. 잠시 후 다시 시도해 주세요.');return;}
   const st=curState();if(st.view==='product')readProd();else if(st.view==='scent')readScent(st.scent);else if(st.view==='home')readHome();
   const scentKw={};Object.keys(SK).forEach(k=>{const arr=SK[k].map(o=>({t:o.t,c:kwCount(k,o)})).filter(o=>o.t&&o.t.trim());if(arr.length)scentKw[k]=arr;});
   const prod={};P.forEach((p,i)=>{prod[i]={en:p.en,kr:p.kr,keywords:(p.keywords||[]).filter(x=>x&&x.trim())};});
-  const btn=document.getElementById('fbSaveBtn');if(btn)btn.textContent='저장 중…';
-  fbRef.set({scentKw,ui:UI,famLabels:FL,prod,ts:Date.now()})
-    .then(()=>{if(btn)btn.textContent='☁ 모두에게 저장';alert('저장됐습니다! 이제 링크로 들어오는 누구나 바로 볼 수 있어요.');})
-    .catch(e=>{if(btn)btn.textContent='☁ 모두에게 저장';alert('저장 실패: '+e.message);});
+  const btn=document.getElementById('fbSaveBtn');if(btn)btn.textContent=silent?'저장 중…':'저장 중…';
+  return fbRef.set({scentKw,ui:UI,famLabels:FL,prod,ts:Date.now()})
+    .then(()=>{if(btn)btn.textContent='✓ 저장됨';setTimeout(()=>{if(btn)btn.textContent='☁ 모두에게 저장';},1500);if(!silent)alert('저장됐습니다! 이제 링크로 들어오는 누구나 바로 볼 수 있어요.');})
+    .catch(e=>{if(btn)btn.textContent='☁ 모두에게 저장';if(!silent)alert('저장 실패: '+e.message);else console.warn('자동저장 실패',e);});
 }
+function fbAuto(){if(FB&&FB.apiKey)fbSave(true);}
 const P=DATA.products; P.forEach((p,i)=>p.id=i);
 const SF=DATA.scentFams, SK=DATA.scentKw||{}, FAM_ORDER=DATA.famOrder;
 const UI=Object.assign({title:'Fragrance Map',subtitle:'탬버린즈 향 맵 · 계열별로 향을 만나보세요'},DATA.ui||{});
@@ -339,7 +340,7 @@ function renderEdit(){
      <div class="el">부제 · 설명</div><input id="u_sub" value="${esc2(UI.subtitle)}">
      <div class="el">계열 이름 (${MODE})</div>${fams.map(f=>`<div class="kwrow"><span style="min-width:0;font-size:10px;color:#9a9a97;align-self:center;white-space:nowrap;">${esc(f)}→</span><input data-fam="${esc2(f)}" value="${esc2(FL[f]||f)}"></div>`).join('')}
      <div class="ea"><button class="save" id="e_save">적용</button><button id="e_close">닫기</button></div>`;
-    box.querySelector('#e_save').onclick=()=>{readHome();navigate(curState(),false);};
+    box.querySelector('#e_save').onclick=()=>{readHome();navigate(curState(),false);fbAuto();};
     box.querySelector('#e_close').onclick=()=>{box.style.display='none';};
     return;
   }
@@ -352,7 +353,7 @@ function renderEdit(){
     box.querySelector('#e_add').onclick=()=>{readScent(s);SK[s].push({t:'',c:0});renderEdit();};
     box.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{readScent(s);SK[s].splice(+b.dataset.rm,1);renderEdit();});
     box.querySelectorAll('[data-rst]').forEach(b=>b.onclick=()=>{readScent(s);kwReset(s,SK[s][+b.dataset.rst]);renderEdit();});
-    box.querySelector('#e_save').onclick=()=>{readScent(s);navigate(curState(),false);};
+    box.querySelector('#e_save').onclick=()=>{readScent(s);navigate(curState(),false);fbAuto();};
     box.querySelector('#e_close').onclick=()=>{box.style.display='none';};
     return;
   }
@@ -368,7 +369,7 @@ function renderEdit(){
   box.querySelector('#e_add').onclick=()=>{readProd();p.keywords.push('');renderEdit();};
   box.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{readProd();p.keywords.splice(+b.dataset.rm,1);renderEdit();});
   box.querySelector('#e_img').onchange=e=>{const f=e.target.files[0];if(!f)return;resizeImg(f,d=>{p.img=d;document.getElementById('e_prev').src=d;});};
-  box.querySelector('#e_save').onclick=()=>{readProd();navigate(curState(),false);};
+  box.querySelector('#e_save').onclick=()=>{readProd();navigate(curState(),false);fbAuto();};
   box.querySelector('#e_close').onclick=()=>{box.style.display='none';};
 }
 function readHome(){const t=document.getElementById('u_title');if(t)UI.title=t.value;const u=document.getElementById('u_sub');if(u)UI.subtitle=u.value;document.querySelectorAll('[data-fam]').forEach(inp=>{const f=inp.dataset.fam,v=inp.value.trim();if(v&&v!==f)FL[f]=v;else delete FL[f];});}
@@ -388,7 +389,7 @@ function exportHTML(){
 }
 const SRC0="<!DOCTYPE html>\n"+document.documentElement.outerHTML;
 document.getElementById('kwpopX').onclick=()=>{hideKwPop();};
-document.getElementById('fbSaveBtn').onclick=fbSave;
+document.getElementById('fbSaveBtn').onclick=()=>fbSave(false);
 fbInit(()=>navigate({view:'home',mode:'판매중'},undefined));
 </script>
 </body></html>
