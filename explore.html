@@ -126,7 +126,7 @@ function applyTransform(){stage.style.transform=`translate(${innerWidth/2+panX}p
 function resetView(){zoom=1;panX=0;panY=0;applyTransform();}
 function clearStage(){nodeEls.forEach(n=>n.el.remove());nodeEls=[];svg.innerHTML='';}
 function place(el,x,y){el.style.left=x+'px';el.style.top=y+'px';stage.appendChild(el);nodeEls.push({el});}
-function line(x,y,cls){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',0);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',y);if(cls)l.setAttribute('class',cls);svg.appendChild(l);}
+function line(x,y,cls){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',0);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',y);if(cls)l.setAttribute('class',cls);svg.appendChild(l);return l;}
 function pdisc(p){return `<div class="disc">${p.img?`<img src="${p.img}">`:`<span class="ph">${esc((p.en||'T')[0])}</span>`}</div>`;}
 function scentCount(s,mode){return (byScent[s]||[]).filter(i=>P[i].bigcat===mode).length;}
 function scentOnSale(s){return (byScent[s]||[]).some(i=>P[i].bigcat==='판매중');}
@@ -142,6 +142,33 @@ function kwReset(s,o){const m=lsGet();m[s+'|'+o.t]=0;lsSet(m);}
 function lvl(c,mx){if(mx<=0)return 1;return Math.max(1,Math.min(10,Math.round(c/mx*9)+1));}
 function szpx(l){l=Math.max(1,Math.min(10,l));return 12+(l-1)*3;}
 function updateKwSizes(s){const cs=KWNODES.map(n=>kwCount(s,n.o));const mx=Math.max(1,...cs);KWNODES.forEach(n=>{n.el.style.fontSize=szpx(lvl(kwCount(s,n.o),mx))+'px';});}
+function relaxKw(nodes,center){
+  if(!nodes||!nodes.length)return;
+  const PAD=9;
+  nodes.forEach(n=>{n.hw=n.el.offsetWidth/2+PAD;n.hh=n.el.offsetHeight/2+PAD;});
+  const cw=(center?center.offsetWidth:0)/2+PAD+6, ch=(center?center.offsetHeight:0)/2+PAD+6;
+  for(let it=0;it<220;it++){
+    let moved=false;
+    // 중앙 향 노드와 겹치지 않도록
+    for(const n of nodes){
+      const ox=(n.hw+cw)-Math.abs(n.x), oy=(n.hh+ch)-Math.abs(n.y);
+      if(ox>0&&oy>0){ if(ox<oy){n.x+=(n.x>=0?ox:-ox);} else {n.y+=(n.y>=0?oy:-oy);} moved=true; }
+    }
+    // 키워드끼리 겹치지 않도록
+    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+      const a=nodes[i],b=nodes[j];
+      let dx=b.x-a.x, dy=b.y-a.y;
+      const ox=(a.hw+b.hw)-Math.abs(dx), oy=(a.hh+b.hh)-Math.abs(dy);
+      if(ox>0&&oy>0){
+        if(ox<=oy){const sgn=dx===0?(Math.random()<.5?1:-1):(dx>0?1:-1);const m=ox/2*sgn;a.x-=m;b.x+=m;}
+        else{const sgn=dy===0?(Math.random()<.5?1:-1):(dy>0?1:-1);const m=oy/2*sgn;a.y-=m;b.y+=m;}
+        moved=true;
+      }
+    }
+    if(!moved)break;
+  }
+  nodes.forEach(n=>{n.x=Math.round(n.x);n.y=Math.round(n.y);n.el.style.left=n.x+'px';n.el.style.top=n.y+'px';if(n.ln){n.ln.setAttribute('x2',n.x);n.ln.setAttribute('y2',n.y);}});
+}
 function navigate(st,push){
   MODE=st.mode||MODE;
   if(st.view==='home')renderHome();
@@ -177,20 +204,23 @@ function renderScent(s){
     el.innerHTML=pdisc(p)+`<div class="lbl">${esc(p.en)}</div>`+(p.bigcat==='단종'?'<div class="dtag">단종</div>':'');
     el.onclick=()=>navigate({view:'product',prod:id,scent:s,mode:MODE},true);
     line(x,y);place(el,x,y);});
-  // keywords scattered like a mind map
+  // keywords scattered like a mind map (겹침 방지)
   const kwv=kws.filter(o=>o.t&&o.t.trim());
   const maxC=Math.max(1,...kwv.map(o=>kwCount(s,o)));
   KWNODES=[];
+  const knodes=[];
   kwv.forEach((o,k)=>{
-    const ang=(2*Math.PI*k/Math.max(kwv.length,1))+(Math.random()-0.5)*1.0;
-    const r=118+Math.random()*80;
+    const ang=(2*Math.PI*k/Math.max(kwv.length,1))+(Math.random()-0.5)*0.6;
+    const r=150+Math.random()*70;
     const x=Math.round(r*Math.cos(ang)),y=Math.round(r*Math.sin(ang));
     const el=document.createElement('div');el.className='node kwnode';el.textContent=o.t;
     el.style.fontSize=szpx(lvl(kwCount(s,o),maxC))+'px';
-    el.onclick=(ev)=>{ev.stopPropagation();kwInc(s,o);updateKwSizes(s);el.classList.add('pop');setTimeout(()=>el.classList.remove('pop'),220);};
-    line(x,y,'kwln');place(el,x,y);
+    el.onclick=(ev)=>{ev.stopPropagation();kwInc(s,o);updateKwSizes(s);relaxKw(knodes,c);el.classList.add('pop');setTimeout(()=>el.classList.remove('pop'),220);};
+    const ln=line(x,y,'kwln');place(el,x,y);
+    knodes.push({el,o,x,y,ln});
     KWNODES.push({el,o});
   });
+  relaxKw(knodes,c);
   applyTransform();updateCrumb('scent',s);
 }
 function renderProduct(id,s){
