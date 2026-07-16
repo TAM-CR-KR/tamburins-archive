@@ -166,17 +166,36 @@ function scentCount(s,mode){return (byScent[s]||[]).filter(i=>P[i].bigcat===mode
 function scentOnSale(s){return (byScent[s]||[]).some(i=>P[i].bigcat==='판매중');}
 function scentDiscPerfume(s){return (byScent[s]||[]).some(i=>P[i].bigcat==='단종'&&P[i].type==='프래그런스');}
 let CLICKED=[], popHidden=false;
-function hashStr(w){let h=0;for(let i=0;i<w.length;i++){h=(h*31+w.charCodeAt(i))>>>0;}return h;}
-const SADV=['은은하게','포근하게','부드럽게','살포시','깊고 잔잔하게','스치듯 감미롭게','가만히'];
-const SMID=['무드가 감돌며,','감성이 어우러져,','결이 살아나며,','여운이 번지며,','분위기가 피어나며,'];
-const SCLOSE=['마음까지 편안해지는 향이에요.','기분 좋은 여운이 오래 남는 향이에요.','살며시 감싸 안기는 듯한 향이에요.','오래도록 곁에 두고 싶어지는 향이에요.','하루의 끝을 부드럽게 다독여 주는 향이에요.','설렘이 은은히 피어나는 향이에요.'];
+function hasJong(w){if(!w)return false;const c=w.charCodeAt(w.length-1);if(c<0xAC00||c>0xD7A3)return false;return (c-0xAC00)%28!==0;}
+function pWa(w){return hasJong(w)?'과':'와';}
+function pIGa(w){return hasJong(w)?'이':'가';}
+function pEul(w){return hasJong(w)?'을':'를';}
+function pRo(w){if(!w)return '로';const c=w.charCodeAt(w.length-1);if(c<0xAC00||c>0xD7A3)return '로';const j=(c-0xAC00)%28;return (j===0||j===8)?'로':'으로';}
+const KWBANK={"감각적": {"adv": "감각적으로", "img": "감각적인 분위기"}, "고소": {"adv": "고소하게", "img": "고소한 결"}, "고요": {"adv": "고요히", "img": "고요한 정적"}, "그린": {"adv": "싱그럽게", "img": "푸릇한 그린 노트"}, "깊은 숲": {"img": "깊은 숲의 공기"}, "노을": {"img": "붉게 물든 노을"}, "늦가을": {"img": "늦가을의 정취"}, "달콤": {"adv": "달콤하게", "img": "달콤한 여운"}, "담요": {"img": "포근한 담요 한 장"}, "따사로움": {"adv": "따사롭게", "img": "따사로운 온기"}, "바다": {"img": "탁 트인 바다"}, "바람": {"img": "선선한 바람 한 줄기"}, "사찰": {"img": "고즈넉한 사찰의 향"}, "생명력": {"img": "싱그러운 생명력"}, "스모키": {"adv": "스모키하게", "img": "은은한 스모키함"}, "시원": {"adv": "시원하게", "img": "시원한 청량감"}, "싱그러움": {"adv": "싱그럽게", "img": "싱그러운 생기"}, "여름 끝자락": {"img": "여름 끝자락의 여운"}, "여름 햇살": {"img": "눈부신 여름 햇살"}, "우디": {"adv": "우디하게", "img": "따뜻한 나무결"}, "우아": {"adv": "우아하게", "img": "우아한 무드"}, "우아함": {"adv": "우아하게", "img": "우아한 기품"}, "위안": {"img": "잔잔한 위안"}, "은방울꽃": {"img": "청초한 은방울꽃"}, "이끼": {"img": "촉촉한 이끼 내음"}, "자유": {"adv": "자유롭게", "img": "거침없는 자유로움"}, "장미": {"img": "우아한 장미 한 송이"}, "절제된 달콤": {"img": "절제된 달콤함"}, "중독성": {"img": "자꾸만 끌리는 매력"}, "질주": {"img": "시원한 질주감"}, "차분": {"adv": "차분하게", "img": "차분히 가라앉는 무드"}, "청량": {"adv": "청량하게", "img": "청량한 공기"}, "청초": {"adv": "청초하게", "img": "청초한 분위기"}, "크리미": {"adv": "크리미하게", "img": "크리미한 부드러움"}, "포근": {"adv": "포근하게", "img": "포근한 감싸임"}, "풀내음": {"img": "싱그러운 풀내음"}, "햇빛": {"img": "따스한 햇빛"}, "허브": {"img": "산뜻한 허브 향"}, "홍차": {"img": "따뜻한 홍차 한 잔"}, "히노키": {"img": "청량한 히노키 숲"}, "Amber": {"img": "포근한 앰버"}, "Citrus": {"img": "상큼한 시트러스"}, "Herbal": {"img": "산뜻한 허브"}, "Marin": {"img": "청량한 마린 노트"}, "Metal": {"img": "차가운 메탈릭 감각"}, "Musk(Cotton)": {"img": "포근한 코튼 머스크"}, "Nutty": {"img": "고소한 너티함"}, "Spicy": {"adv": "스파이시하게", "img": "알싸한 스파이시함"}, "Vanilla": {"img": "달콤한 바닐라"}, "Woody": {"img": "따뜻한 우디 노트"}, "Heliotrope, Cyclamen, White rose": {"img": "헬리오트로프·시클라멘·화이트로즈의 꽃결"}, "Pink pepper / Juniper berry": {"img": "핑크페퍼와 주니퍼베리의 알싸함"}, "Rum, Patchouli, Tonka bean, Amber": {"img": "럼·파출리·통카빈·앰버의 깊은 노트"}};
+function kwImg(t){const b=KWBANK[t];return (b&&b.img)?b.img:t;}
+function kwAdv(t){const b=KWBANK[t];return (b&&b.adv)?b.adv:null;}
+function joinImgs(a){if(a.length===1)return a[0];if(a.length===2)return a[0]+pWa(a[0])+' '+a[1];return a.slice(0,-1).join(', ')+', 그리고 '+a[a.length-1];}
 function buildSentence(scent,kws){
-  const list=(kws||[]).filter(k=>k&&k.trim());const n=list.length;
-  if(n<2)return '';
-  const h=hashStr(scent);
-  const adv=SADV[h%SADV.length], mid=SMID[(h>>>3)%SMID.length], close=SCLOSE[(h>>>6)%SCLOSE.length];
-  const body=(n===2)?`${list[0]}, ${list[1]}`:`${list.slice(0,n-1).join(', ')}, 그리고 ${list[n-1]}`;
-  return `${scent} 향은 ${adv} ${body} ${mid} ${close}`;
+  const list=(kws||[]).filter(k=>k&&k.trim());
+  if(list.length<2)return '';
+  const imgs=list.map(kwImg);
+  const advs=list.map(kwAdv).filter(Boolean);
+  const a=imgs[0], last=imgs[imgs.length-1], rest=imgs.slice(1), joined=joinImgs(imgs);
+  const S=[
+    `${scent} 향은 ${joined}${pIGa(last)} 어우러진 향이에요.`,
+    `${scent} 향은 마치 ${a}처럼, ${joinImgs(rest)}${pIGa(last)} 은은히 감도는 향이에요.`,
+    `${a}에 ${joinImgs(rest)}${pIGa(last)} 살며시 스며든 듯한 향이에요.`,
+    `${scent} 향은 ${joined}${pEul(last)} 고이 담아낸 향이에요.`,
+    `한 번 맡으면 ${joined}${pIGa(last)} 오래도록 맴도는 향이에요.`,
+    `${scent} 향은 ${a}${pIGa(a)} ${last}${pRo(last)} 번져가는, 그런 향이에요.`,
+    `${scent} 향은 ${a}처럼 시작해 ${last}${pRo(last)} 물드는 향이에요.`,
+    `${joined}… ${scent} 향은 그 모든 결이 살아 숨 쉬는 향이에요.`
+  ];
+  if(advs.length){
+    S.push(`${scent} 향은 ${advs[0]} ${last}${pIGa(last)} 피어오르는 향이에요.`);
+    S.push(`${advs[0]} 감싸 안기는 듯, ${scent} 향은 ${joined}${pIGa(last)} 은은히 남는 향이에요.`);
+  }
+  return S[Math.floor(Math.random()*S.length)];
 }
 function showKwPop(t){const p=document.getElementById('kwpop');document.getElementById('kwpopTxt').textContent=t;p.style.display='block';}
 function hideKwPop(){const p=document.getElementById('kwpop');if(p)p.style.display='none';}
