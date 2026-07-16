@@ -174,7 +174,7 @@ function buildSentence(scent,kws){
   const list=(kws||[]).filter(k=>k&&k.trim());const n=list.length;
   if(n<2)return '';
   const h=hashStr(scent);
-  const adv=SADV[h%SADV.length], mid=SMID[(h>>3)%SMID.length], close=SCLOSE[(h>>6)%SCLOSE.length];
+  const adv=SADV[h%SADV.length], mid=SMID[(h>>>3)%SMID.length], close=SCLOSE[(h>>>6)%SCLOSE.length];
   const body=(n===2)?`${list[0]}, ${list[1]}`:`${list.slice(0,n-1).join(', ')}, 그리고 ${list[n-1]}`;
   return `${scent} 향은 ${adv} ${body} ${mid} ${close}`;
 }
@@ -388,7 +388,7 @@ function exportHTML(){
   alert("explore.html 파일이 저장되었습니다. GitHub 저장소에 업로드하면 반영됩니다.");
 }
 const SRC0="<!DOCTYPE html>\n"+document.documentElement.outerHTML;
-document.getElementById('kwpopX').onclick=()=>{hideKwPop();};
+document.getElementById('kwpopX').onclick=()=>{hideKwPop();CLICKED=[];};
 document.getElementById('fbSaveBtn').onclick=()=>fbSave(false);
 fbInit(()=>navigate({view:'home',mode:'판매중'},undefined));
 </script>
