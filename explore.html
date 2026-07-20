@@ -181,6 +181,8 @@ function classify(t){
   if(!/[A-Za-z]/.test(t)&&/(한|운|은|는|인|던)$/.test(t)&&t.length>=2)return {type:'adj',adj:t};
   return {type:'noun',img:t,adv:null};
 }
+const SCENTLORE={"BATHER IN THE LAKE": "안개 낀 새벽 숲, 아무도 없는 맑고 잔잔한 호수 위를 유영하듯", "BERGA SANDAL": "지중해의 푸른 기운과 따사로운 햇빛 아래", "BILINGUAL": "서로 다른 두 언어가 만나 새로운 의미로 확장되듯", "BLUE HINOKI": "푸른 물결을 따라 바다로 흘러든 히노키처럼", "BOLD CITRUS": "상큼하고 다채로운 시트러스로 경쾌하게 시작해", "BOTTARI": "단단한 매듭이 풀리며 쏟아지는 폭발적인 생명력처럼", "BROWN": "우아한 마호가니 나뭇결이 그려내는 결을 따라", "CHAMO": "꿀처럼 진득한 카모마일이 지친 마음을 감싸듯", "EVENING GLOW": "해질녘 노을이 장미를 발갛게 물들이듯", "FRENCH NEEDLE": "비에 젖은 편백나무 숲길을 걷듯", "HAYSTACKS": "햇볕에 마른 건초더미의 포근한 온기 속에서", "HOLY METAL": "신성한 유적지의 성전에 깃든 차분한 공기처럼", "LALE": "새벽 이슬을 머금은 청초한 푸른 사과를 베어 문 듯", "LATE AUTUMN": "바람에 뒤엉켜 느린 군무를 펼치는 사탕수수 밭에서", "PUMKINI": "하얀 호박에서 피어나는 청초하고 달콤한 놀라움처럼", "PUPPY": "무릎 위에 잠든 강아지의 말랑한 숨결처럼", "SALTY VANILLA": "사막의 짭조름한 공기가 햇빛 아래 반짝이듯", "SUEDE PEAR": "스웨이드에 감싸인 부드러운 배의 결처럼", "SUMMER TAILS": "은방울꽃이 흩날리는 여름의 끝자락, 시원한 바람을 따라", "SUNSHINE": "안젤리카 가득한 숲을 자유로이 질주하듯", "THAW, SUNSET": "겨울 공기가 걷히고 따뜻한 노을이 하늘을 물들이듯", "UNKNOWN OUD": "깊은 숲속 홀로 타오르다 남은 불의 흔적처럼", "WHITE DARJEELING": "찻잔 속에서 우아하게 추는 향의 춤처럼", "WOOD SALT BEACH": "햇살에 물든 에메랄드빛 바다와 숲의 경계에서"};
+const TAILS=["어우러지는 향이에요.","감도는 향이에요.","피어나는 향이에요.","번지는 향이에요.","잔잔히 맴도는 향이에요."];
 function buildSentence(scent,kws){
   const list=(kws||[]).filter(k=>k&&k.trim());
   if(list.length<2)return '';
@@ -206,6 +208,11 @@ function buildSentence(scent,kws){
       SA.push(`${scent} 향은 ${joinImgs(others)}${pIGa(others[others.length-1])} ${adjs.length?A+' ':''}${at.noun}${pRo(at.noun)} ${at.clause} 향이에요.`);
     }
     return SA[Math.floor(Math.random()*SA.length)];
+  }
+  const LORE=SCENTLORE[scent];
+  if(LORE){
+    const phr=cs.map(c=>c.type==='adj'?`${c.adj} 무드`:c.img).filter((x,i,a)=>a.indexOf(x)===i);
+    if(phr.length>=2){const last=phr[phr.length-1];const tail=TAILS[Math.floor(Math.random()*TAILS.length)];return `${scent} 향은 ${LORE}, ${joinImgs(phr)}${pIGa(last)} ${tail}`;}
   }
   let S;
   if(adjs.length&&nouns.length){
