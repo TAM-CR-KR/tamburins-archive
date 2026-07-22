@@ -87,10 +87,10 @@ function accordGuideView(a){
 }
 function listView(a){
   let h=`<div class="adesc" style="background:${a.c.bg};border:1px solid ${a.c.bd};color:${a.c.ds}">${esc(a.desc)}</div>`;
+  h+=accordGuideView(a);
   h+=`<div class="pfhd">향수 목록 · 향수를 선택하면 상세로 이동</div>`;
   h+=`<div class="toc">`+a.perfumes.map((p,i)=>`<div class="row" data-pf="${i}"><div style="display:flex;align-items:center"><span class="idx">${String(i+1).padStart(2,'0')}</span><div><div class="nm">${esc(p.name)}</div>${p.sub?`<div class="sub">${esc(p.sub)}</div>`:''}</div></div><span class="arw">›</span></div>`).join('')+`</div>`;
   if(EDIT)h+=`<button class="add" id="addPf" style="margin-top:10px">＋ 향수 추가</button>`;
-  h+=accordGuideView(a);
   return h;
 }
 function detailView(a,p){
