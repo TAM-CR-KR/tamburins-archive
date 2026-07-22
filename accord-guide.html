@@ -138,7 +138,7 @@ function render(){
   let h;
   if(sel>=0&&sel<a.perfumes.length){const p=a.perfumes[sel];h=EDIT?detailEdit(a,p):detailView(a,p);}
   else{sel=-1;h=EDIT?listEdit(a):listView(a);}
-  $('panel').innerHTML=h;bind(a);window.scrollTo({top:0,behavior:'instant'});
+  $('panel').innerHTML=h;bind(a);try{if(window.parent&&window.parent!==window){window.parent.postMessage({t:'accGuideTop'},'*');window.scrollTo(0,0);}else{window.scrollTo(0,0);}}catch(e){window.scrollTo(0,0);}
 }
 function readEdit(){const a=GDATA[cur];
   if(sel>=0&&$('e_name')){const p=a.perfumes[sel];
@@ -180,7 +180,7 @@ function fbSave(silent){if(!fbRef){if(!silent)alert('저장이 준비되지 않�
   document.querySelectorAll('[data-act=save]').forEach(b=>b.textContent='저장 중…');
   fbRef.set({gdata:GDATA,ts:Date.now()}).then(()=>{document.querySelectorAll('[data-act=save]').forEach(b=>{b.textContent='✓ 저장됨';setTimeout(()=>b.textContent='☁ 모두에게 저장',1500);});if(!silent)alert('저장됐습니다! 링크로 들어오는 누구나 바로 볼 수 있어요.');}).catch(e=>{if(!silent)alert('저장 실패: '+e.message);});}
 $('editBtn').onclick=()=>{if(EDIT){readEdit();EDIT=false;$('editBtn').textContent='✎ 편집';render();return;}const v=prompt('편집 비밀번호를 입력하세요');if(v===PASS){EDIT=true;$('editBtn').textContent='✓ 편집 종료';render();}else if(v!==null)alert('비밀번호가 올바르지 않습니다.');};
-function applyParam(){const q=new URLSearchParams(location.search).get('p');if(!q)return;const t=q.toUpperCase();for(let i=0;i<GDATA.length;i++){const j=GDATA[i].perfumes.findIndex(p=>((p.base||p.name||'').toUpperCase())===t);if(j>=0){cur=i;sel=j;return;}}}
+function applyParam(){const q=new URLSearchParams(location.search);const p=q.get('p');if(!p)return;const t=p.toUpperCase();const acc=(q.get('acc')||'').toLowerCase();if(acc){const ai=GDATA.findIndex(a=>a.id===acc);if(ai>=0){const j=GDATA[ai].perfumes.findIndex(x=>((x.base||x.name||'').toUpperCase())===t);if(j>=0){cur=ai;sel=j;return;}}}for(let i=0;i<GDATA.length;i++){const j=GDATA[i].perfumes.findIndex(x=>((x.base||x.name||'').toUpperCase())===t);if(j>=0){cur=i;sel=j;return;}}}
 function loadKW(cb){firebase.database().ref('tamburins/overrides/scentKw').once('value').then(s=>{const v=s.val()||{};Object.keys(v).forEach(k=>{const arr=(v[k]||[]).map(o=>o&&o.t?o.t:o).filter(Boolean);if(arr.length)KW[k.toUpperCase()]=arr;});cb();}).catch(cb);}
 function init(){try{firebase.initializeApp(FB);fbRef=firebase.database().ref('tamburins/accordGuide');
   fbRef.once('value').then(s=>{const v=s&&s.val?s.val():null;

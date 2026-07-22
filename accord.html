@@ -43,7 +43,7 @@ TABS.forEach((t,i)=>{
   t.items.forEach(it=>{
     if(it.h){const hd=document.createElement('div');hd.className='subhd';hd.innerHTML='<span class="k">'+it.h+'</span><span class="e">'+it.en+'</span>';pan.appendChild(hd);}
     const w=document.createElement('div');w.className='frameWrap';
-    const fr=document.createElement('iframe');fr.className='study';fr.title=it.h||'Accord';fr.dataset.src=(PARAM_P&&it.src.indexOf('accord-guide')>=0)?(it.src+'?p='+encodeURIComponent(PARAM_P)):it.src;
+    const fr=document.createElement('iframe');fr.className='study';fr.title=it.h||'Accord';fr.dataset.src=(it.src.indexOf('accord-guide')>=0&&location.search)?(it.src+location.search):it.src;
     fr.addEventListener('load',()=>{fit(fr);try{new ResizeObserver(()=>fit(fr)).observe(fr.contentDocument.body);}catch(e){}});
     w.appendChild(fr);pan.appendChild(w);
   });
@@ -56,6 +56,7 @@ function sel(i){
   window.scrollTo({top:0,behavior:'instant'});
 }
 setInterval(()=>{document.querySelectorAll('.panel.on iframe.study').forEach(fit);},800);
+window.addEventListener('message',e=>{if(e&&e.data&&e.data.t==='accGuideTop'){const f=document.querySelector('.panel.on iframe.study');if(f)f.scrollIntoView({block:'start'});}});
 sel(0);
 </script>
 </body></html>
