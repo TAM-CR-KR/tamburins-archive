@@ -164,7 +164,7 @@ function fbSave(silent){if(!fbRef){if(!silent)alert('저장이 준비되지 않�
 $('editBtn').onclick=()=>{if(EDIT){readEdit();EDIT=false;$('editBtn').textContent='✎ 편집';render();return;}const v=prompt('편집 비밀번호를 입력하세요');if(v===PASS){EDIT=true;$('editBtn').textContent='✓ 편집 종료';render();}else if(v!==null)alert('비밀번호가 올바르지 않습니다.');};
 function loadKW(cb){firebase.database().ref('tamburins/overrides/scentKw').once('value').then(s=>{const v=s.val()||{};Object.keys(v).forEach(k=>{const arr=(v[k]||[]).map(o=>o&&o.t?o.t:o).filter(Boolean);if(arr.length)KW[k.toUpperCase()]=arr;});cb();}).catch(cb);}
 function init(){try{firebase.initializeApp(FB);fbRef=firebase.database().ref('tamburins/accordGuide');
-  fbRef.once('value').then(s=>{const v=s&&s.val?s.val():null;if(v&&v.gdata&&v.gdata.length)GDATA=v.gdata;loadKW(render);}).catch(()=>loadKW(render));
+  fbRef.once('value').then(s=>{const v=s&&s.val?s.val():null;if(v&&v.gdata&&v.gdata.length){const byId={};v.gdata.forEach(a=>byId[a.id]=a);GDATA=GDATA.map(base=>{const fb=byId[base.id];if(!fb)return base;return Object.assign({},base,fb,{approach:(fb.approach&&fb.approach.length)?fb.approach:base.approach,scripts:(fb.scripts&&fb.scripts.length)?fb.scripts:base.scripts,upsell:(fb.upsell&&fb.upsell.length)?fb.upsell:base.upsell,caution:(fb.caution&&(fb.caution.no||fb.caution.yes))?fb.caution:base.caution});});}loadKW(render);}).catch(()=>loadKW(render));
 }catch(e){render();}}
 init();
 </script></body></html>
