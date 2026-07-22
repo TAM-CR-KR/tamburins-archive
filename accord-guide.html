@@ -57,6 +57,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-
 .rm{border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;padding:6px 9px;font-size:12px;white-space:nowrap;}
 .add{border:1px dashed var(--ink);background:#fff;border-radius:8px;cursor:pointer;padding:7px 12px;font-size:12px;margin-top:6px;}
 .el{font-size:11px;color:var(--muted);margin:12px 0 4px;font-weight:700;}
+.pfhd{font-family:'TITLEFONT',serif;text-transform:uppercase;font-size:11px;letter-spacing:.1em;color:var(--muted);margin:24px 0 10px;padding-top:16px;border-top:1px solid var(--line);}
 .edact{display:flex;gap:10px;margin:14px 0;padding:12px;background:#fff;border:1px solid var(--line);border-radius:12px;}
 </style></head><body>
 <div class="bar"><button class="btn" id="editBtn">✎ 편집</button></div>
@@ -124,9 +125,9 @@ function detailEdit(a,p){
 function render(){
   tabsRender();const a=GDATA[cur];if(sel>=a.perfumes.length)sel=0;
   let h=`<div class="adesc" style="background:${a.c.bg};border:1px solid ${a.c.bd};color:${a.c.ds}">${esc(a.desc)}</div>`;
-  h+=pfList(a);const p=a.perfumes[sel];
-  if(EDIT){ if(p)h+=detailEdit(a,p); }
-  else { if(p)h+=detailView(a,p); h+=accordGuideView(a); }
+  const p=a.perfumes[sel];
+  if(EDIT){ h+=pfList(a); if(p)h+=detailEdit(a,p); }
+  else { h+=accordGuideView(a); h+=`<div class="pfhd">향수별 상세 · 향수를 선택하세요</div>`; h+=pfList(a); if(p)h+=detailView(a,p); }
   $('panel').innerHTML=h;bind(a);window.scrollTo({top:0,behavior:'instant'});
 }
 function readEdit(){const a=GDATA[cur],p=a.perfumes[sel];if(!$('e_name'))return;
