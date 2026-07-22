@@ -65,6 +65,10 @@ padding:12px 18px;background:rgba(244,244,242,.93);backdrop-filter:blur(8px);bor
 .scentC .disc{width:104px;height:104px;border-radius:50%;overflow:hidden;border:2px solid #fff;box-shadow:0 8px 22px rgba(0,0,0,.18);background:#eee;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;}
 .scentC .disc img{width:100%;height:100%;object-fit:cover;}
 .scentC .big{font-size:15px;font-weight:600;padding:11px 20px;border-radius:16px;background:var(--dark);color:#fff;box-shadow:0 8px 22px rgba(0,0,0,.25);letter-spacing:.03em;}
+.scentC .accbig{cursor:pointer;transition:.15s;}
+.scentC .accbig:hover{opacity:.82;transform:translateY(-1px);}
+.scentC .acclink{margin-top:8px;font-size:11px;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
+.scentC .acclink:hover{color:var(--ink);}
 .scentC .sub{font-size:10px;letter-spacing:.14em;color:var(--muted);margin-bottom:7px;}
 .scentC .cnt{font-size:11px;color:var(--muted);margin-top:8px;}
 .skw{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px;max-width:280px;margin-left:auto;margin-right:auto;}
@@ -335,7 +339,9 @@ function renderScent(s){
   let pi=list.find(i=>P[i].type==='프래그런스');if(pi===undefined)pi=(byScent[s]||[]).find(i=>P[i].type==='프래그런스');if(pi===undefined)pi=list[0];
   const pp=(pi!==undefined)?P[pi]:null;
   const c=document.createElement('div');c.className='node scentC';
-  c.innerHTML=(pp?pdisc(pp):'')+`<div class="sub ttl">SCENT</div><div class="big">${esc(s)}</div>`;
+  c.innerHTML=(pp?pdisc(pp):'')+`<div class="sub ttl">SCENT</div><div class="big accbig" title="어코드 가이드에서 보기">${esc(s)}</div><div class="acclink">어코드 가이드에서 보기 →</div>`;
+  const goAcc=(e)=>{if(e)e.stopPropagation();location.href='./accord.html?p='+encodeURIComponent(s);};
+  c.querySelector('.accbig').onclick=goAcc;c.querySelector('.acclink').onclick=goAcc;
   place(c,0,0);
   const pobs=[];
   // keywords scattered like a mind map (겹침 방지)

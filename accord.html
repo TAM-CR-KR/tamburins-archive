@@ -33,6 +33,7 @@ const TABS=[
    items:[{h:'',en:'',src:'./accord-guide.html'}]},
  {label:'계절날씨에 따른 향 특징', en:'Season & Weather', items:[{h:'',en:'',src:'./season-weather.html'}]},
 ];
+const PARAM_P=new URLSearchParams(location.search).get('p');
 const tabsEl=document.getElementById('tabs'), panelsEl=document.getElementById('panels');
 function fit(fr){try{const d=fr.contentDocument;if(d&&d.body){fr.style.height=(Math.max(d.body.scrollHeight,d.documentElement.scrollHeight)+8)+'px';}}catch(e){}}
 const panels=[];
@@ -42,7 +43,7 @@ TABS.forEach((t,i)=>{
   t.items.forEach(it=>{
     if(it.h){const hd=document.createElement('div');hd.className='subhd';hd.innerHTML='<span class="k">'+it.h+'</span><span class="e">'+it.en+'</span>';pan.appendChild(hd);}
     const w=document.createElement('div');w.className='frameWrap';
-    const fr=document.createElement('iframe');fr.className='study';fr.title=it.h||'Accord';fr.dataset.src=it.src;
+    const fr=document.createElement('iframe');fr.className='study';fr.title=it.h||'Accord';fr.dataset.src=(PARAM_P&&it.src.indexOf('accord-guide')>=0)?(it.src+'?p='+encodeURIComponent(PARAM_P)):it.src;
     fr.addEventListener('load',()=>{fit(fr);try{new ResizeObserver(()=>fit(fr)).observe(fr.contentDocument.body);}catch(e){}});
     w.appendChild(fr);pan.appendChild(w);
   });
