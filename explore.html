@@ -198,8 +198,9 @@ function buildSentence(scent,kws){
   if(list.length<2)return '';
   const cs=list.map(t=>classify(t,scent));
   const uq=a=>a.filter((x,i)=>a.indexOf(x)===i);
+  const wdedupe=arr=>{const seen={};return arr.map(p=>p.split(' ').filter(w=>{if(!w)return false;if(seen[w])return false;seen[w]=1;return true;}).join(' ')).filter(p=>p);};
   const adjs=uq(cs.filter(c=>c.type==='adj').map(c=>c.adj));
-  const nouns=uq(cs.filter(c=>c.type==='noun').map(c=>c.img));
+  const nouns=wdedupe(uq(cs.filter(c=>c.type==='noun').map(c=>c.img)));
   const seenA={};
   const attrs=cs.filter(c=>c.type==='attr').filter(c=>{if(seenA[c.noun])return false;seenA[c.noun]=1;return true;});
   const advs=cs.map(c=>c.adv).filter(Boolean);
@@ -221,7 +222,7 @@ function buildSentence(scent,kws){
   }
   const LORE=SCENTLORE[scent];
   if(LORE){
-    const phr=cs.map(c=>c.type==='adj'?`${c.adj} 무드`:c.img).filter((x,i,a)=>a.indexOf(x)===i);
+    const phr=wdedupe(cs.map(c=>c.type==='adj'?`${c.adj} 무드`:c.img).filter((x,i,a)=>a.indexOf(x)===i));
     if(phr.length>=2){const last=phr[phr.length-1];const tail=TAILS[Math.floor(Math.random()*TAILS.length)];return `${scent} 향은 ${LORE}, ${joinImgs(phr)}${pIGa(last)} ${tail}`;}
   }
   let S;
