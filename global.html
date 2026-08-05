@@ -162,7 +162,7 @@ function matchQ(p){
   (p.noteRows||[]).forEach(n=>{parts.push(n.group||'');parts.push(L(n));});
   (p.scents||[]).forEach(s=>{parts.push(s.name||'');parts.push(L(s));});
   const hay=parts.join(' ').toLowerCase();
-  return toks.some(t=>hay.includes(t));
+  return toks.every(t=>hay.includes(t));
 }
 
 /* ---- filter bars ---- */
