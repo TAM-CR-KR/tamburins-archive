@@ -15,7 +15,7 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Hiragino Sans','Microsof
 .langs{display:flex;gap:6px;justify-content:center;margin-top:18px;flex-wrap:wrap;}
 .langs button{font-family:inherit;font-size:12.5px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:7px 15px;}
 .langs button.on{background:var(--ink);color:#fff;border-color:var(--ink);}
-.editbtn{font-family:inherit;font-size:12px;cursor:pointer;border:1px solid var(--accent);background:#fff;color:var(--accent);border-radius:999px;padding:7px 15px;}
+.editbtn{position:absolute;top:16px;right:18px;z-index:5;font-family:inherit;font-size:12px;cursor:pointer;border:1px solid var(--accent);background:#fff;color:var(--accent);border-radius:999px;padding:7px 15px;}
 .editbtn.on{background:var(--accent);color:#fff;}
 .edithint{font-size:11px;color:#b08968;margin-top:8px;min-height:14px;}
 .barwrap{max-width:1180px;margin:0 auto;padding:6px 16px 0;}
@@ -94,9 +94,9 @@ textarea.ei{min-height:70px;line-height:1.6;resize:vertical;}
   <div class="lab">TAMBURINS · FRAGRANCE ARCHIVE</div>
   <h1 class="ttl">Fragrance Archive</h1>
   <p id="sub"></p>
+  <button id="editbtn" class="editbtn">Edit</button>
   <div class="langs" id="langs">
     <button data-l="en" class="on">ENG</button><button data-l="cn">中文</button><button data-l="jp">日本語</button>
-    <button id="editbtn" class="editbtn">Edit</button>
   </div>
   <div class="edithint" id="edithint"></div>
 <div class="searchwrap"><input id="search" class="searchbox" type="search" placeholder="Search"></div>
@@ -155,11 +155,14 @@ function L(o){return (o&&o[lang])||'';}
 function stat(p){return (p.statusL&&p.statusL[lang])||p.bigcat;}
 function matchQ(p){
   if(!q)return true;
+  const toks=q.split(/[\s,]+/).filter(Boolean);
+  if(!toks.length)return true;
   const parts=[p.name,p.kr||'',(p.accords||[]).join(' '),L(p.meta),p.notes||'',L(p.desc)];
   (p.extrasec||[]).forEach(s=>{parts.push(s['title_'+lang]||s.title_en||'');parts.push(L(s));});
   (p.noteRows||[]).forEach(n=>{parts.push(n.group||'');parts.push(L(n));});
   (p.scents||[]).forEach(s=>{parts.push(s.name||'');parts.push(L(s));});
-  return parts.join(' ').toLowerCase().includes(q);
+  const hay=parts.join(' ').toLowerCase();
+  return toks.some(t=>hay.includes(t));
 }
 
 /* ---- filter bars ---- */
