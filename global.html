@@ -54,7 +54,7 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Hiragino Sans','Microsof
 .mbody{padding:26px 28px;}
 .mbody .lab{font-family:'TITLEFONT',serif;text-transform:uppercase;font-size:10px;letter-spacing:.14em;color:var(--muted);}
 .mbody h2{font-family:'TITLEFONT',serif;text-transform:uppercase;font-size:23px;letter-spacing:.03em;margin:5px 0 3px;}
-.mbody .meta{font-size:12px;color:#6b6156;margin-top:8px;}
+.mbody .meta{font-size:12px;color:#6b6156;margin-top:8px;white-space:pre-line;}
 .mbody .date{font-size:11px;color:#a89a86;margin-top:5px;letter-spacing:.04em;}
 .mbody .accs{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
 .sec{margin-top:18px;padding-top:16px;border-top:1px solid #f0eadf;}
@@ -89,6 +89,7 @@ textarea.ei{min-height:70px;line-height:1.6;resize:vertical;}
 .searchbox{width:100%;font-family:inherit;font-size:13.5px;border:1px solid var(--line);border-radius:999px;padding:10px 18px;background:#fff;color:var(--ink);outline:none;}
 .searchbox:focus{border-color:var(--accent);}
 .searchbox::placeholder{color:#b7ad9e;}
+.meta-ta{min-height:60px;}
 </style></head><body>
 <div class="hero">
   <div class="lab">TAMBURINS · FRAGRANCE ARCHIVE</div>
@@ -245,7 +246,7 @@ function renderEdit(){const u=UI[lang],p=draft;
   h+=`<div class="elabel">${esc(u.e_status)}</div><select class="ei" id="e_stat"><option value="판매중" ${stat(p)==='판매중'?'selected':''}>${esc(u.status_sale)}</option><option value="단종" ${stat(p)==='단종'?'selected':''}>${esc(u.status_disc)}</option></select>`;
   h+=`<div class="elabel">${esc(u.e_date)}</div><input class="ei" id="e_date" value="${esc(p.date||'')}" placeholder="YYYY-MM-DD">`;
   h+=`<div class="elabel">${esc(u.e_accords)}</div><input class="ei" id="e_accords" value="${esc((p.accords||[]).join(', '))}" placeholder="Woody, Musk">`;
-  h+=`<div class="elabel">${esc(u.e_meta)} (${lang.toUpperCase()})</div><input class="ei" id="e_meta" value="${esc(L(p.meta))}">`;
+  h+=`<div class="elabel">${esc(u.e_meta)} (${lang.toUpperCase()})</div><textarea class="ei meta-ta" id="e_meta">${esc(L(p.meta))}</textarea>`;
   if(p.notes!==undefined&&p.notes!=='')h+=`<div class="elabel">${esc(u.top)}</div><input class="ei" id="e_notes" value="${esc(p.notes||'')}">`;
   h+=`<div class="elabel">${esc(u.desc_h)} (${lang.toUpperCase()})</div><textarea class="ei" id="e_desc">${esc(L(p.desc))}</textarea>`;
   /* extra sections */
