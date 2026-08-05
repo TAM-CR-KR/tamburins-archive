@@ -111,7 +111,7 @@ const DATA=[{"name": "Chamo", "kr": "카모", "bigcat": "판매중", "type": "�
 const ACC={"Woody": {"bg": "#6f4a2d", "fg": "#ffffff"}, "Musk": {"bg": "#d2ccc0", "fg": "#4a4034"}, "Green": {"bg": "#bcd9a6", "fg": "#3c5230"}, "Amber": {"bg": "#b8a89a", "fg": "#403227"}, "Herbal": {"bg": "#9caf88", "fg": "#2e3a26"}, "Floral": {"bg": "#f3b6c6", "fg": "#7a3346"}, "Spicy": {"bg": "#d99a7c", "fg": "#5c2a18"}, "Citrus": {"bg": "#ece7a0", "fg": "#5c5a1e"}, "Fruity": {"bg": "#f4a8c2", "fg": "#7a3350"}, "Nutty": {"bg": "#cbb267", "fg": "#4a3a12"}, "Vanilla": {"bg": "#ecdcc0", "fg": "#6b5638"}, "Balsamic": {"bg": "#c8a3ab", "fg": "#4d2f36"}, "Mossy": {"bg": "#8f9d5c", "fg": "#ffffff"}, "Marine": {"bg": "#8fbce8", "fg": "#234a6b"}, "Marin": {"bg": "#8fbce8", "fg": "#234a6b"}, "Metal": {"bg": "#b9bfc4", "fg": "#35404a"}, "Musk(Cotton)": {"bg": "#d2ccc0", "fg": "#4a4034"}, "Tea": {"bg": "#e9c39c", "fg": "#6b4a2c"}};
 const CATS=["프래그런스", "핸드케어", "헤어", "립케어", "바디케어", "홈 프래그런스", "__etc"];
 const CATLBL={"프래그런스": {"en": "Fragrance", "cn": "香水", "jp": "フレグランス"}, "홈 프래그런스": {"en": "Home", "cn": "家居香氛", "jp": "ホーム"}, "바디케어": {"en": "Body", "cn": "身体护理", "jp": "ボディ"}, "스킨케어": {"en": "Skincare", "cn": "护肤", "jp": "スキンケア"}, "핸드케어": {"en": "Hand", "cn": "手部护理", "jp": "ハンド"}, "헤어": {"en": "Hair", "cn": "头发护理", "jp": "ヘア"}, "립케어": {"en": "Lip", "cn": "唇部护理", "jp": "リップ"}, "웨어": {"en": "Wear", "cn": "Wear", "jp": "ウェア"}, "__etc": {"en": "Etc", "cn": "其他", "jp": "その他"}};
-const UI={"en": {"sub": "TAMBURINS Full Archive — All Products", "all": "All", "sale": "On Sale", "disc": "Discontinued", "notes": "Scent Notes", "status_sale": "On Sale", "status_disc": "Discontinued", "count": "items", "cat": "Category", "status": "Status", "desc_h": "Description", "scents_h": "Scent Variants", "top": "Notes Summary", "launch": "Launched", "edit": "Edit", "editing": "Done", "edithint": "Edit mode ON — tap a product to edit. Changes are shared live.", "saved": "Saved.", "addprod": "+ Add Product", "e_images": "Images", "e_name": "Name", "e_cat": "Category", "e_status": "Status", "e_date": "Launch Date", "e_accords": "Accords (comma-separated)", "e_meta": "Meta", "e_sections": "Detail Sections", "e_addsec": "Add Section", "e_addnote": "Add Note", "e_addscent": "Add Scent", "save": "Save", "cancel": "Cancel", "delete": "Delete", "remove": "Remove", "delconf": "Delete this product?", "pwprompt": "Enter edit password", "pwwrong": "Incorrect password."}, "cn": {"sub": "TAMBURINS 完整档案 — 全部产品", "all": "全部", "sale": "在售", "disc": "停产", "notes": "香调说明", "status_sale": "在售", "status_disc": "停产", "count": "款", "cat": "品类", "status": "状态", "desc_h": "产品说明", "scents_h": "香型", "top": "香调概要", "launch": "上市", "edit": "编辑", "editing": "完成", "edithint": "编辑模式已开启 — 点击产品即可编辑，改动实时共享。", "saved": "已保存。", "addprod": "+ 添加产品", "e_images": "图片", "e_name": "名称", "e_cat": "品类", "e_status": "状态", "e_date": "上市日期", "e_accords": "香型（逗号分隔）", "e_meta": "规格", "e_sections": "详情段落", "e_addsec": "添加段落", "e_addnote": "添加香调", "e_addscent": "添加香型", "save": "保存", "cancel": "取消", "delete": "删除", "remove": "移除", "delconf": "确定删除此产品？", "pwprompt": "请输入编辑密码", "pwwrong": "密码错误。"}, "jp": {"sub": "TAMBURINS フルアーカイブ — 全製品", "all": "すべて", "sale": "販売中", "disc": "販売終了", "notes": "香りのノート", "status_sale": "販売中", "status_disc": "販売終了", "count": "点", "cat": "カテゴリー", "status": "ステータス", "desc_h": "説明", "scents_h": "香りのバリエーション", "top": "ノート概要", "launch": "発売", "edit": "編集", "editing": "完了", "edithint": "編集モード ON — 製品をタップして編集。変更はリアルタイム共有されます。", "saved": "保存しました。", "addprod": "+ 製品を追加", "e_images": "画像", "e_name": "名称", "e_cat": "カテゴリー", "e_status": "ステータス", "e_date": "発売日", "e_accords": "アコード（カンマ区切り）", "e_meta": "仕様", "e_sections": "詳細セクション", "e_addsec": "セクション追加", "e_addnote": "ノート追加", "e_addscent": "香り追加", "save": "保存", "cancel": "キャンセル", "delete": "削除", "remove": "削除", "delconf": "この製品を削除しますか？", "pwprompt": "編集パスワードを入力", "pwwrong": "パスワードが正しくありません。"}};
+const UI={"en": {"sub": "TAMBURINS Full Archive — All Products", "all": "All", "sale": "On Sale", "disc": "Discontinued", "notes": "Scent Notes", "status_sale": "On Sale", "status_disc": "Discontinued", "count": "items", "cat": "Category", "status": "Status", "desc_h": "Description", "scents_h": "Scent Variants", "top": "Notes Summary", "launch": "Launched", "edit": "Edit", "editing": "Done", "edithint": "Edit mode ON — price & status are saved per language (EN/CN/JP). Switch language, then edit.", "saved": "Saved.", "addprod": "+ Add Product", "e_images": "Images", "e_name": "Name", "e_cat": "Category", "e_status": "Status (this language only)", "e_date": "Launch Date", "e_accords": "Accords (comma-separated)", "e_meta": "Price / Meta", "e_sections": "Detail Sections", "e_addsec": "Add Section", "e_addnote": "Add Note", "e_addscent": "Add Scent", "save": "Save", "cancel": "Cancel", "delete": "Delete", "remove": "Remove", "delconf": "Delete this product?", "pwprompt": "Enter edit password", "pwwrong": "Incorrect password."}, "cn": {"sub": "TAMBURINS 完整档案 — 全部产品", "all": "全部", "sale": "在售", "disc": "停产", "notes": "香调说明", "status_sale": "在售", "status_disc": "停产", "count": "款", "cat": "品类", "status": "状态", "desc_h": "产品说明", "scents_h": "香型", "top": "香调概要", "launch": "上市", "edit": "编辑", "editing": "完成", "edithint": "编辑模式已开启 — 价格与状态按语言(EN/CN/JP)分别保存。切换语言后再编辑。", "saved": "已保存。", "addprod": "+ 添加产品", "e_images": "图片", "e_name": "名称", "e_cat": "品类", "e_status": "状态（仅此语言）", "e_date": "上市日期", "e_accords": "香型（逗号分隔）", "e_meta": "价格 / 规格", "e_sections": "详情段落", "e_addsec": "添加段落", "e_addnote": "添加香调", "e_addscent": "添加香型", "save": "保存", "cancel": "取消", "delete": "删除", "remove": "移除", "delconf": "确定删除此产品？", "pwprompt": "请输入编辑密码", "pwwrong": "密码错误。"}, "jp": {"sub": "TAMBURINS フルアーカイブ — 全製品", "all": "すべて", "sale": "販売中", "disc": "販売終了", "notes": "香りのノート", "status_sale": "販売中", "status_disc": "販売終了", "count": "点", "cat": "カテゴリー", "status": "ステータス", "desc_h": "説明", "scents_h": "香りのバリエーション", "top": "ノート概要", "launch": "発売", "edit": "編集", "editing": "完了", "edithint": "編集モード ON — 価格とステータスは言語(EN/CN/JP)ごとに保存。言語を切り替えてから編集。", "saved": "保存しました。", "addprod": "+ 製品を追加", "e_images": "画像", "e_name": "名称", "e_cat": "カテゴリー", "e_status": "ステータス（この言語のみ）", "e_date": "発売日", "e_accords": "アコード（カンマ区切り）", "e_meta": "価格 / 仕様", "e_sections": "詳細セクション", "e_addsec": "セクション追加", "e_addnote": "ノート追加", "e_addscent": "香り追加", "save": "保存", "cancel": "キャンセル", "delete": "削除", "remove": "削除", "delconf": "この製品を削除しますか？", "pwprompt": "編集パスワードを入力", "pwwrong": "パスワードが正しくありません。"}};
 const FBCONF={"apiKey": "AIzaSyCJvH60--uKJTgwfXIrhEuB-9DVH5meAXs", "authDomain": "tamburins-fragrance-map.firebaseapp.com", "databaseURL": "https://tamburins-fragrance-map-default-rtdb.firebaseio.com", "projectId": "tamburins-fragrance-map", "storageBucket": "tamburins-fragrance-map.firebasestorage.app", "messagingSenderId": "267604496028", "appId": "1:267604496028:web:3ed4d62d1155fa47722759"};
 const AC_DEF={bg:'#ece5da',fg:'#5b4a3a'};
 let lang='en', fcat='all', fstat='all', curModal=-1, editMode=false, slideIdx=0, draft=null;
@@ -145,6 +145,7 @@ OV.on('value',s=>{
 function accChip(a){const c=ACC[a]||AC_DEF;return `<span class="accchip" style="background:${c.bg};color:${c.fg}">${esc(a)}</span>`;}
 function catName(t){const o=CATLBL[t];return o?o[lang]:t;}
 function L(o){return (o&&o[lang])||'';}
+function stat(p){return (p.statusL&&p.statusL[lang])||p.bigcat;}
 
 /* ---- filter bars ---- */
 function renderBars(){const u=UI[lang];
@@ -170,12 +171,12 @@ function render(){
   $('addprod').textContent=u.addprod;
   renderBars();
   const ETC=['스킨케어','웨어'];
-  const list=EFF.filter(p=>(fcat==='all'||(fcat==='__etc'?ETC.includes(p.type):p.type===fcat))&&(fstat==='all'||p.bigcat===fstat));
+  const list=EFF.filter(p=>(fcat==='all'||(fcat==='__etc'?ETC.includes(p.type):p.type===fcat))&&(fstat==='all'||stat(p)===fstat));
   $('cnt').textContent=list.length+' '+u.count;
   $('grid').innerHTML=list.map(p=>{
     const gi=EFF.indexOf(p);
     const img=(p.imgs&&p.imgs[0])||'';
-    const pill=p.bigcat==='판매중'?`<span class="pill sale">${esc(u.status_sale)}</span>`:`<span class="pill disc">${esc(u.status_disc)}</span>`;
+    const st=stat(p);const pill=st==='판매중'?`<span class="pill sale">${esc(u.status_sale)}</span>`:`<span class="pill disc">${esc(u.status_disc)}</span>`;
     return `<div class="card" data-i="${gi}"><div class="pic">${img?`<img src="${img}" loading="lazy">`:''}</div>${pill}<span class="ctag">${esc(catName(p.type))}</span><div class="info"><div class="nm">${esc(p.name)}</div><div class="accs">${(p.accords||[]).map(accChip).join('')}</div></div></div>`;
   }).join('');
   $('grid').querySelectorAll('.card').forEach(c=>c.onclick=()=>openModal(+c.dataset.i));
@@ -203,7 +204,7 @@ function renderView(p){const u=UI[lang];
   }
   $('modal').innerHTML=`<button class="x" onclick="closeModal()">×</button>
    <div class="mtop">${slideShow(p)}
-   <div class="mbody"><div class="lab">${esc(catName(p.type))} · ${p.bigcat==='판매중'?esc(u.status_sale):esc(u.status_disc)}</div>
+   <div class="mbody"><div class="lab">${esc(catName(p.type))} · ${stat(p)==='판매중'?esc(u.status_sale):esc(u.status_disc)}</div>
      <h2>${esc(p.name)}</h2>
      <div class="meta">${esc(L(p.meta))}</div>
      ${p.date?`<div class="date">${esc(u.launch)}: ${esc(p.date)}</div>`:''}
@@ -222,7 +223,7 @@ function renderEdit(){const u=UI[lang],p=draft;
   h+=`<div class="elabel">${esc(u.e_images)}</div><div>${th('img',p.imgs||[],'rmImg')}<label class="ebtn add">+ <input type="file" accept="image/*" style="display:none" onchange="addImg(event)"></label></div>`;
   h+=`<div class="elabel">${esc(u.e_name)}</div><input class="ei" id="e_name" value="${esc(p.name)}">`;
   h+=`<div class="elabel">${esc(u.e_cat)}</div><select class="ei" id="e_type">${CATS.filter(c=>c!=='__etc').concat(['스킨케어']).map(c=>`<option value="${esc(c)}" ${p.type===c?'selected':''}>${esc(catName(c))} (${esc(c)})</option>`).join('')}</select>`;
-  h+=`<div class="elabel">${esc(u.e_status)}</div><select class="ei" id="e_stat"><option value="판매중" ${p.bigcat==='판매중'?'selected':''}>${esc(u.status_sale)}</option><option value="단종" ${p.bigcat==='단종'?'selected':''}>${esc(u.status_disc)}</option></select>`;
+  h+=`<div class="elabel">${esc(u.e_status)}</div><select class="ei" id="e_stat"><option value="판매중" ${stat(p)==='판매중'?'selected':''}>${esc(u.status_sale)}</option><option value="단종" ${stat(p)==='단종'?'selected':''}>${esc(u.status_disc)}</option></select>`;
   h+=`<div class="elabel">${esc(u.e_date)}</div><input class="ei" id="e_date" value="${esc(p.date||'')}" placeholder="YYYY-MM-DD">`;
   h+=`<div class="elabel">${esc(u.e_accords)}</div><input class="ei" id="e_accords" value="${esc((p.accords||[]).join(', '))}" placeholder="Woody, Musk">`;
   h+=`<div class="elabel">${esc(u.e_meta)} (${lang.toUpperCase()})</div><input class="ei" id="e_meta" value="${esc(L(p.meta))}">`;
@@ -245,7 +246,7 @@ function renderEdit(){const u=UI[lang],p=draft;
   $('modal').innerHTML=h;
 }
 function syncDraft(){const p=draft;const g=id=>{const e=$(id);return e?e.value:undefined;};
-  p.name=g('e_name'); p.type=g('e_type'); p.bigcat=g('e_stat'); p.date=g('e_date');
+  p.name=g('e_name'); p.type=g('e_type'); p.statusL=p.statusL||{}; p.statusL[lang]=g('e_stat'); p.date=g('e_date');
   p.accords=(g('e_accords')||'').split(',').map(x=>x.trim()).filter(Boolean);
   p.meta=p.meta||{}; p.meta[lang]=g('e_meta');
   if($('e_notes'))p.notes=g('e_notes');
