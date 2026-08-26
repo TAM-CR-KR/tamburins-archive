@@ -117,6 +117,12 @@ padding:12px 18px;background:rgba(244,244,242,.93);backdrop-filter:blur(8px);bor
 .famsub{color:var(--muted);font-size:13px;margin:0;}
 .famchips{max-width:780px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
 .famchips .sc{font-size:13px;padding:8px 15px;}
+
+.famC{z-index:6;}
+.famC .famcircle{width:160px;height:160px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(0,0,0,.20);border:3px solid #fff;text-align:center;padding:12px;box-sizing:border-box;}
+.famC .fnm{font-size:18px;font-weight:700;line-height:1.28;letter-spacing:.02em;}
+.famC .fcnt{font-size:11px;opacity:.82;margin-top:7px;font-weight:500;letter-spacing:.04em;}
+.scentnode{font-weight:600;}
 </style></head>
 <body>
 <div id="top">
@@ -385,15 +391,24 @@ function renderHome(){
   updateCrumb('home');
 }
 function renderFam(f){
-  hideKwPop();homeEl.classList.add('on');vp.classList.remove('on');hint.classList.add('hide');
-  const list=famScents(f),col=famColor(f)[0];
-  homeEl.innerHTML=`<div class="famhead"><button class="famback" id="famBack">← 전체 계열</button>`
-    +`<h1 class="famtitle"><span class="famdot" style="background:${col}"></span>${esc(FL[f]||f)}</h1>`
-    +`<p class="famsub">${list.length}개의 향 · 향을 눌러 상세 보기</p></div>`
-    +`<div class="famchips">${list.length?list.map(s=>`<span class="sc" data-s="${esc2(s)}" data-f="${esc2(f)}">${esc(s)}</span>`).join(''):'<div class="emptyf">해당 향이 없습니다.</div>'}</div>`;
-  const bk=document.getElementById('famBack');if(bk)bk.onclick=()=>navigate({view:'home',mode:MODE},true);
-  homeEl.querySelectorAll('.sc').forEach(c=>c.onclick=()=>navigate({view:'scent',scent:c.dataset.s,fam:c.dataset.f,mode:MODE},true));
-  updateCrumb('fam',f);
+  hideKwPop();homeEl.classList.remove('on');vp.classList.add('on');hint.classList.remove('hide');
+  resetView();clearStage();
+  const list=famScents(f),col=famColor(f),n=list.length;
+  const c=document.createElement('div');c.className='node famC';
+  c.innerHTML=`<div class="famcircle" style="background:${col[0]};color:${col[1]}"><span class="fnm">${esc(FL[f]||f)}</span><span class="fcnt">${n} scents</span></div>`;
+  place(c,0,0);
+  const knodes=[];
+  list.forEach((s,k)=>{
+    const ang=(2*Math.PI*k/Math.max(n,1))-Math.PI/2+(Math.random()-0.5)*0.4;
+    const r=200+Math.random()*66;
+    const x=Math.round(r*Math.cos(ang)),y=Math.round(r*Math.sin(ang));
+    const el=document.createElement('div');el.className='node kwnode scentnode';el.textContent=s;
+    el.onclick=(ev)=>{ev.stopPropagation();navigate({view:'scent',scent:s,fam:f,mode:MODE},true);};
+    const ln=line(x,y,'kwln');place(el,x,y);
+    knodes.push({el,o:{t:s},x,y,ln});
+  });
+  relaxKw(knodes,c,[]);
+  applyTransform();updateCrumb('fam',f);
 }
 function renderScent(s,fam){
   CLICKED=[];popHidden=false;hideKwPop();homeEl.classList.remove('on');vp.classList.add('on');hint.classList.remove('hide');
