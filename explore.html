@@ -123,6 +123,7 @@ padding:12px 18px;background:rgba(244,244,242,.93);backdrop-filter:blur(8px);bor
 .famC .fnm{font-size:18px;font-weight:700;line-height:1.28;letter-spacing:.02em;}
 .famC .fcnt{font-size:11px;opacity:.82;margin-top:7px;font-weight:500;letter-spacing:.04em;}
 .scentnode{font-weight:600;}
+.wlabel-en{font-size:10.5px;font-weight:500;opacity:.8;letter-spacing:.02em;}
 </style></head>
 <body>
 <div id="top">
@@ -353,6 +354,10 @@ function famColor(f){
     '너티':['#cbb267','#4a3a12'],'그 외':['#e5ddd0','#5b4a3a']};
   return M[f]||['#e5ddd0','#5b4a3a'];
 }
+function famEn(f){
+  const E={'우디':'Woody','머스크':'Musk & Amber','플로럴':'Floral','시트러스':'Citrus','그린':'Green & Herbal','프루티':'Fruity','마린':'Marine','스파이시':'Spicy','바닐라':'Vanilla','너티':'Nutty','그 외':'Others'};
+  return E[f]||'';
+}
 function famScents(f){
   const vis=Object.keys(byScent).filter(s=>scentVisible(s,MODE)&&(SF[s]||["그 외"]).includes(f));
   return [...new Set(vis)].sort();
@@ -375,9 +380,12 @@ function renderHome(){
     const rmid=(R+r)/2,[lx,ly]=pt(rmid,am);
     let deg=am*180/Math.PI; if(deg>90&&deg<270)deg+=180;
     const cnt=(g[f]?[...new Set(g[f])].length:0);
-    const label=esc(FL[f]||f);
+    const label=esc(FL[f]||f), en=esc(famEn(f));
     segs+=`<path class="wseg" data-fam="${esc2(f)}" d="${d}" fill="${bg}"></path>`
-      +`<text class="wlabel" x="${lx}" y="${ly}" fill="${fg}" text-anchor="middle" dominant-baseline="central" transform="rotate(${deg.toFixed(1)} ${lx} ${ly})" data-fam="${esc2(f)}">${label}</text>`;
+      +`<text class="wlabel" fill="${fg}" text-anchor="middle" transform="rotate(${deg.toFixed(1)} ${lx} ${ly})" data-fam="${esc2(f)}">`
+      +`<tspan x="${lx}" y="${(ly-3).toFixed(1)}">${label}</tspan>`
+      +(en?`<tspan class="wlabel-en" x="${lx}" y="${(ly+13).toFixed(1)}">${en}</tspan>`:'')
+      +`</text>`;
   });
   homeEl.innerHTML=`<div class="hhead"><h1 class="ttl">${esc(UI.title)}</h1><p>${esc(UI.subtitle)}</p></div>`
     + (N?`<div class="wheelwrap"><svg class="wheel" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">${segs}`
