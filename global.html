@@ -192,6 +192,8 @@ function render(){
   renderBars();
   const ETC=['스킨케어','웨어'];
   const list=EFF.filter(p=>(fcat==='all'||(fcat==='__etc'?ETC.includes(p.type):p.type===fcat))&&(fstat==='all'||stat(p)===fstat)&&matchQ(p));
+  const _dnum=d=>d?String(d).replace(/[^0-9]/g,'').padEnd(8,'0').slice(0,8):'00000000';
+  list.sort((a,b)=>_dnum(b.date).localeCompare(_dnum(a.date)));
   $('cnt').textContent=list.length+' '+u.count;
   $('grid').innerHTML=list.map(p=>{
     const gi=EFF.indexOf(p);
