@@ -95,7 +95,12 @@ padding:12px 18px;background:rgba(244,244,242,.93);backdrop-filter:blur(8px);bor
 .kwrow{display:flex;gap:6px;margin-top:6px;}.kwrow input{flex:1;}
 .kwrow button{border:1px solid var(--line);background:#fff;border-radius:8px;color:#111;cursor:pointer;padding:0 11px;}
 .addkw{margin-top:8px;border:1px dashed var(--ink);background:#fff;border-radius:8px;color:var(--ink);cursor:pointer;padding:6px 12px;font-size:11.5px;width:100%;}
-#kwpop{position:fixed;top:66px;left:50%;transform:translateX(-50%);z-index:46;max-width:min(92vw,560px);background:var(--card);border:1px solid var(--ink);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.18);padding:15px 42px 15px 20px;display:none;font-size:14.5px;line-height:1.55;color:var(--ink);}
+#kwpop{position:fixed;top:80px;right:24px;left:auto;transform:none;z-index:46;max-width:min(92vw,360px);max-height:72vh;overflow:auto;background:var(--card);border:1px solid var(--ink);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.18);padding:16px 40px 16px 18px;display:none;font-size:14px;line-height:1.6;color:var(--ink);}
+#kwpop .svh{font-family:'TITLEFONT','AppleSD',serif;text-transform:uppercase;font-size:12px;letter-spacing:.05em;color:var(--muted);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line);}
+#kwpop .svk{color:var(--ink);font-weight:600;}
+#kwpop .svs{font-size:13.5px;line-height:1.62;color:var(--ink);padding:9px 0;border-bottom:1px dashed var(--line);}
+#kwpop .svs:last-child{border-bottom:none;}
+#kwpop .svs b{font-weight:700;color:#2b2824;background:#efe7d6;border-radius:3px;padding:0 2px;}
 #kwpop .x{position:absolute;top:9px;right:11px;width:22px;height:22px;border:none;background:transparent;color:var(--muted);font-size:16px;cursor:pointer;line-height:1;padding:0;}
 #kwpop .x:hover{color:var(--ink);}
 #edit .ea{margin-top:14px;display:flex;gap:8px;}
@@ -286,7 +291,28 @@ function buildSentence(scent,kws){
   return S[Math.floor(Math.random()*S.length)];
 }
 function showKwPop(t){const p=document.getElementById('kwpop');document.getElementById('kwpopTxt').textContent=t;p.style.display='block';}
-function hideKwPop(){const p=document.getElementById('kwpop');if(p)p.style.display='none';}
+function hideKwPop(){const p=document.getElementById('kwpop');if(p){p.style.display='none';p.classList.remove('survey');}}
+const SURVEY={"CHAMO": {"map": {"위안": "위안", "여유": "여유", "차(Tea)": "차", "차분": "차분", "집": "집", "따뜻": "따뜻", "편안": "편안", "비": "비", "카페": "카페", "카모마일 티": "카모마일"}, "sents": ["가장 편안한 집에서 마시는 따뜻한 차처럼, 부드러운 카모마일과 머스크가 지친 마음을 포근하게 감싸는 향.", "비 내리는 오후의 조용한 카페, 창가에 앉아 느긋한 여유를 즐길 때처럼 마음을 차분하게 가라앉혀 주는 향.", "햇살이 드는 카페 테라스에서 따뜻한 카모마일 차를 마실 때처럼, 누구나 부담 없이 편안하게 머물 수 있는 향.", "비 오는 날 집에서 책을 읽는 순간처럼, 고요한 여유와 부드러운 허브 향이 공간을 차분하게 채우는 향.", "늦은 오후의 카페에서 느끼는 따뜻한 햇살처럼, 은은한 스킨 머스크가 일상에 편안함과 작은 여유를 더하는 향.", "창밖으로 내리는 비를 바라보며 집에서 허브 차를 마실 때처럼, 복잡한 생각을 차분하게 정돈해 주는 향.", "바쁜 하루를 마치고 돌아온 집, 나만을 위한 따뜻한 휴식처럼 깊은 편안함과 느긋한 여유를 건네는 향.", "비에 젖은 골목의 작은 카페에서 마주한 카모마일 차처럼, 잔잔하고 차분한 분위기가 오래 남는 향.", "서늘한 날씨에도 마음만은 따뜻하게, 부드러운 허브와 머스크가 편안함을 전하며 비 오는 하루에도 온전한 여유를 만들어 주는 향.", "조용한 집이나 한적한 카페에서 차분히 즐기는 한 잔의 차처럼, 일상의 속도를 잠시 늦춰 주는 차분한 향."]}, "BOTTARI": {"map": {"고급스러움": "고급", "세련된": "세련", "겨울": "겨울", "나무": "나무", "따뜻": "따뜻", "비": "비", "숲": "숲", "시크": "시크", "실버 주얼리": "실버", "메탈릭": "메탈"}, "sents": ["비가 그친 겨울 숲, 젖은 나무와 이끼 사이로 서늘한 앰버와 머스크가 피어나는 신비로운 향.", "고급 호텔 바의 따뜻한 조명 아래 잘 재단된 수트를 입은 사람처럼, 세련되고 시크한 존재감을 남기는 향.", "새벽의 숲에서 비에 젖은 나무를 스칠 때처럼, 차갑고 촉촉한 첫인상 뒤로 고급스러운 머스크가 이어지는 향.", "검은 겨울 코트에 더해진 마지막 액세서리처럼, 시크하고 세련된 인상 속에 은근한 따뜻함을 품은 향.", "도심에 내리는 비와 젖은 나무의 향을 닮아, 절제된 고급스러움과 자신감 있는 시크함을 완성하는 향.", "차가운 겨울 숲에 스며든 햇살처럼, 서늘한 우디 향과 따뜻한 앰버가 만나 감각적이고 세련된 반전을 보여주는 향.", "비 내린 뒤 안개가 내려앉은 숲처럼 신비롭고, 가까이 다가갈수록 고급스럽고 시크한 잔향이 드러나는 향.", "마른 나무와 부드러운 머스크가 어우러져, 겨울 저녁의 차가운 공기 속에서도 따뜻하고 세련된 분위기를 만드는 향.", "비에 젖은 깊은 숲의 이끼처럼 묵직하면서도, 현대적인 공간에 어울리는 고급스럽고 세련된 감각을 지닌 향.", "겨울 새벽의 나무 사이를 걷는 듯한 서늘함과 따뜻한 살결의 머스크가 공존하는, 조용하지만 강렬하게 시크한 향."]}, "SUMMER TAILS": {"map": {"여름": "여름", "산뜻": "산뜻", "바람": "바람", "시원": "시원", "가을": "가을", "공원": "공원", "깨끗": "깨끗", "늦여름": "늦여름"}, "sents": ["눈부신 여름 햇살 아래 불어오는 바람처럼, 풋과일과 화이트 플로럴의 산뜻하고 시원한 기운이 기분을 환기해 주는 향.", "늦여름 공원을 산책할 때 마주한 깨끗한 바람처럼, 은방울꽃의 맑은 향기가 가볍게 스쳐 가는 향.", "푸른 여름 공원에서 피크닉을 즐기는 순간처럼, 들꽃과 과일의 산뜻함이 갓 샤워한 듯 깨끗하게 퍼지는 향.", "늦여름에서 가을로 넘어가는 저녁, 살랑이는 바람과 함께 찾아온 시원한 공기를 담은 향.", "맑은 여름날 한적한 공원에서 마주한 바람처럼, 일상의 답답함을 씻어내고 기분을 깨끗하게 바꿔 주는 향.", "아직 햇살은 따뜻하지만 가을이 가까워진 늦여름, 들꽃의 산뜻함과 아이스티 같은 시원함이 공존하는 향.", "여름 바람에 말린 새하얀 셔츠처럼 깨끗하고, 다가오는 가을의 부드러운 공기까지 느껴지는 향.", "늦여름 공원에서 자전거를 타고 달릴 때처럼, 풀꽃의 산뜻한 향기가 가벼운 바람을 타고 따라오는 향.", "뜨거운 여름이 지나고 가을이 시작되는 순간처럼, 맑고 시원한 플로럴 향이 피부 위에 깨끗하게 머무는 향.", "해 질 무렵의 늦여름 공원, 선선한 바람을 맞으며 걷는 산책처럼 부드럽고 시원하게 기억되는 향."]}};
+function surveyMatch(scent,clicked){
+  const S=SURVEY[scent]; if(!S) return null;
+  const terms=[]; (clicked||[]).forEach(k=>{const key=(k||'').trim();const t=S.map[key]||key; if(t&&!terms.includes(t))terms.push(t);});
+  const use=terms.slice(-3); if(use.length<2) return null;
+  const score=str=>use.reduce((n,t)=>n+(str.indexOf(t)>=0?1:0),0);
+  const ranked=S.sents.map(str=>({str,n:score(str)})).filter(o=>o.n>0).sort((a,b)=>b.n-a.n);
+  const full=ranked.filter(o=>o.n===use.length).map(o=>o.str);
+  let picked=full.slice(0,3);
+  for(const o of ranked){ if(picked.length>=3) break; if(picked.indexOf(o.str)<0) picked.push(o.str); }
+  return picked.length?{terms:use,list:picked}:null;
+}
+function hlSent(str,terms){ let out=esc(str); (terms||[]).forEach(t=>{ if(!t)return; const rx=new RegExp('('+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','g'); out=out.replace(rx,'<b>$1</b>'); }); return out; }
+function showSurvey(scent,clicked){
+  const m=surveyMatch(scent,clicked); if(!m){ return false; }
+  const kwlabel=(clicked||[]).slice(-3).map(k=>esc((k||'').trim())).join(' · ');
+  const items=m.list.map(s=>`<div class="svs">${hlSent(s,m.terms)}</div>`).join('');
+  const p=document.getElementById('kwpop'); p.classList.add('survey');
+  document.getElementById('kwpopTxt').innerHTML=`<div class="svh">${esc(scent)} · <span class="svk">${kwlabel}</span></div>${items}`;
+  p.style.display='block'; return true;
+}
 function scentVisible(s,mode){return mode==='판매중'?scentOnSale(s):(!scentOnSale(s)&&scentDiscPerfume(s));}
 Object.keys(SK).forEach(s=>{SK[s]=(SK[s]||[]).map(x=>typeof x==='string'?{t:x,c:0}:{t:x.t,c:(x.c!=null?x.c:(x.s?x.s-1:0))});});
 let KWNODES=[];
@@ -443,7 +469,7 @@ function renderScent(s,fam){
     const x=Math.round(r*Math.cos(ang)),y=Math.round(r*Math.sin(ang));
     const el=document.createElement('div');el.className='node kwnode';el.textContent=o.t;
     el.style.fontSize=szpx(lvl(kwCount(s,o),maxC))+'px';
-    el.onclick=(ev)=>{ev.stopPropagation();kwInc(s,o);updateKwSizes(s);relaxKw(knodes,c,pobs);el.classList.add('pop');setTimeout(()=>el.classList.remove('pop'),220);if(!EDIT){if(!CLICKED.includes(o.t))CLICKED.push(o.t);if(CLICKED.length>=2)showKwPop(buildSentence(s,CLICKED));}};
+    el.onclick=(ev)=>{ev.stopPropagation();kwInc(s,o);updateKwSizes(s);relaxKw(knodes,c,pobs);el.classList.add('pop');setTimeout(()=>el.classList.remove('pop'),220);if(!EDIT){if(!CLICKED.includes(o.t))CLICKED.push(o.t);if(CLICKED.length>=2){ if(!(SURVEY[s]&&showSurvey(s,CLICKED))) showKwPop(buildSentence(s,CLICKED)); }}};
     const ln=line(x,y,'kwln');place(el,x,y);
     knodes.push({el,o,x,y,ln});
     KWNODES.push({el,o});
