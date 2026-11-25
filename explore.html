@@ -129,11 +129,27 @@ padding:12px 18px;background:rgba(244,244,242,.93);backdrop-filter:blur(8px);bor
 .famC .fcnt{font-size:11px;opacity:.82;margin-top:7px;font-weight:500;letter-spacing:.04em;}
 .scentnode{font-weight:600;}
 .wlabel-en{font-size:10.5px;font-weight:500;opacity:.8;letter-spacing:.02em;}
+.langlink{font-size:11px;color:#b08968;margin-top:7px;cursor:pointer;}.langlink:hover{text-decoration:underline;}
+.langov{position:fixed;inset:0;background:rgba(40,36,30,.42);display:none;align-items:flex-start;justify-content:center;padding:34px 16px;z-index:200;overflow:auto;}
+.langov.on{display:flex;}
+.langm{background:#fff;border-radius:18px;max-width:560px;width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(40,30,15,.22);animation:langpop .3s ease;}
+@keyframes langpop{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+.langh{padding:20px 22px;background:#f3efe9;color:#4a3f31;position:relative;}
+.langh .lt{font-size:10.5px;letter-spacing:.14em;}.langh h3{font-size:21px;margin-top:6px;font-weight:700;}
+.langh .lc{font-size:12.5px;margin-top:5px;}.langh .ln2{font-size:11.5px;margin-top:9px;border-top:1px solid rgba(0,0,0,.08);padding-top:8px;line-height:1.5;opacity:.85;}
+.langx{position:absolute;top:14px;right:16px;font-size:20px;background:none;border:0;cursor:pointer;color:inherit;opacity:.7;}.langx:hover{opacity:1;}
+.langb{padding:10px 22px 24px;}
+.lrow{border-left:3px solid #ccc;padding:3px 0 3px 12px;margin-top:13px;}
+.lrow .ll{font-size:11.5px;font-weight:700;}.lrow .lp{font-size:13.5px;margin-top:3px;}.lrow .le{font-size:11.5px;color:#8d8678;margin-top:2px;}
+.lbox{border-radius:11px;padding:12px 14px;margin-top:10px;}.lbox .lbl{font-size:10.5px;font-weight:700;margin-bottom:5px;}.lbox .lbt{font-size:12.5px;line-height:1.6;}
+.lfoot{font-size:11px;color:#8d8678;margin-top:12px;}
+@media(prefers-reduced-motion:reduce){.langm{animation:none;}}
 </style></head>
 <body>
 <div id="top">
 <div class="brand" id="logo"><span class="b1">FRAGRANCE MAP</span><small class="ttl">Tamburins Fragrance Map</small></div>
 <a class="btn navacc" href="./accord.html" style="text-decoration:none;">✦ Accord 연구하기</a>
+<a class="btn navacc" href="./scent-language.html" style="text-decoration:none;">✦ 향의 언어</a>
 <div id="crumb"></div>
 <div class="modeT" id="modeT"><button data-m="판매중">판매중</button><button data-m="단종">단종</button></div>
 <button class="btn sub" id="backBtn">‹ 뒤로</button>
@@ -444,6 +460,22 @@ function renderFam(f){
   relaxKw(knodes,c,[]);
   applyTransform();updateCrumb('fam',f);
 }
+const LANG={"CHAMO": {"concept": "달콤 쌉쌀한 허브 뒤로 부드럽고 따뜻한 여운", "notes": "카모마일 · 클라리세이지 · 블론드 우드 · 머스크", "vision": {"p": "오후 햇살의 옅은 금빛", "t": "Sun-drenched · Golden"}, "sound": {"p": "잔잔하게 이어지는 흐름", "t": "Legato · Whisper"}, "touch": {"p": "크리미한 나무결", "t": "Creamy · Textured"}, "taste": {"p": "꿀 한 방울 떨어뜨린 허브티", "t": "Bittersweet · Honeyed"}, "easy": "달콤한 허브차 한 잔을 지나, 부드러운 나무결과 머스크가 살결처럼 남는 향이에요.", "pro": "씁쓸하게 열리는 허벌한 오프닝이 블론드 우드와 머스크의 크리미함으로 드라이다운까지 매끄럽게 이어집니다.", "foot": ""}, "BERGA SANDAL": {"concept": "청량하고 쌉쌀한 시작, 여름날의 따뜻한 기억", "notes": "베르가못 · 라임 · 카다멈 · 샌달우드", "vision": {"p": "한여름의 선명한 초록", "t": "Vivid · Luminous"}, "sound": {"p": "경쾌한 시작, 낮게 깔리는 마무리", "t": "Staccato → Base"}, "touch": {"p": "바삭하게 시작해 매끄럽게", "t": "Crisp → Smooth"}, "taste": {"p": "청귤 껍질의 쌉쌀함", "t": "Zesty · Bitter"}, "easy": "청귤 껍질을 막 깐 듯한 쌉쌀한 상쾌함이, 따뜻한 샌달우드 위로 천천히 가라앉아요.", "pro": "제스티하고 비터한 시트러스 오프닝에 카다멈의 스파이시한 터치, 크리미한 샌달우드 베이스로 변화하는 향의 구조입니다.", "foot": ""}, "LALE": {"concept": "청량한 단맛 뒤 잔잔한 그린 플로럴", "notes": "이슬을 머금은 풋사과 · 화이트 튤립 · 샌달우드", "vision": {"p": "이슬 맺힌 하얀 꽃잎", "t": "Sheer · Translucent"}, "sound": {"p": "맑게 울리는 고음", "t": "Bright · Hushed"}, "touch": {"p": "이슬을 머금은 촉촉함", "t": "Dewy"}, "taste": {"p": "풋사과의 새콤한 과즙", "t": "Juicy · Tart"}, "easy": "이슬 맺힌 하얀 꽃 위로 풋사과의 맑은 단맛이 스치는, 투명한 꽃향이에요.", "pro": "주시한 청사과를 오프닝으로 촉촉하고 쉬어한 그린 플로럴이 펼쳐지고, 샌달우드가 은은한 베이스로 부드럽게 마무리됩니다.", "foot": ""}, "EVENING GLOW": {"concept": "노을에 물든 장미", "notes": "TOP 레몬 · 딜  /  MIDDLE 로즈 · 라즈베리  /  BASE 머스크 · 사이프리올 · 패츌리", "vision": {"p": "노을빛 핑크와 금빛", "t": "Dusky · Glowing"}, "sound": {"p": "서서히 차오르는 전개", "t": "Crescendo"}, "touch": {"p": "벨벳 같은 꽃잎", "t": "Velvety"}, "taste": {"p": "라즈베리의 새콤함", "t": "Tart · Juicy"}, "easy": "해 질 녘 노을에 발갛게 물든 장미예요. 새콤한 라즈베리로 시작해 머스크로 저물어요.", "pro": "레몬과 딜의 브라이트한 오프닝, 라즈베리가 더해진 주시한 로즈 하트, 패츌리와 머스크의 차분한 베이스입니다.", "foot": ""}, "SUMMER TAILS": {"concept": "여름의 끝자락", "notes": "TOP 여린 초록잎 · 아니스  /  MIDDLE 맑은 연둣빛을 머금은 흰 꽃  /  BASE 시더우드 · 패츌리 · 머스크", "vision": {"p": "연둣빛 잎 사이 하얀 꽃", "t": "Sheer · Luminous"}, "sound": {"p": "잎을 흔드는 바람 소리", "t": "Vibrant · Whisper"}, "touch": {"p": "가볍게 스치는 바람의 결", "t": "Airy · Crisp"}, "taste": {"p": "아니스의 달큰하고 알싸한 끝맛", "t": "Spicy"}, "easy": "여름 끝자락, 연둣빛 잎 사이로 흰 꽃이 흩날리고 시원한 바람이 스치는 향이에요.", "pro": "여린 초록잎과 아니스의 브라이트한 오프닝, 쉬어한 화이트 플로럴 하트, 시더우드와 머스크의 차분한 드라이다운입니다.", "foot": ""}, "BATHER IN THE LAKE": {"concept": "새벽 안개 속 잔잔한 호수", "notes": "TOP 클라리세이지 · 라벤더  /  MIDDLE 쑥 · 인센스 · 워터  /  BASE 이끼 · 앰버 · 머스크", "vision": {"p": "새벽 안개 내려앉은 호수", "t": "Hazy · Translucent"}, "sound": {"p": "아무도 없는 호수의 고요", "t": "Hushed · Whisper"}, "touch": {"p": "촉촉한 이끼와 물기", "t": "Dewy · Aqueous"}, "taste": {"p": "쑥의 쌉싸름함", "t": "Bitter · Tea-like"}, "easy": "새벽 안개 낀 숲을 지나, 아무도 없는 잔잔한 호수에 몸을 담근 듯 정갈해지는 향이에요.", "pro": "클라리세이지와 라벤더의 아로마틱한 오프닝, 쑥과 인센스에 워터 노트가 더해진 하트, 모시한 앰버 머스크로 고요하게 마무리됩니다.", "foot": ""}, "BROWN": {"concept": "마호가니의 우아한 갈색", "notes": "TOP 그라스 · 올리바넘  /  MIDDLE 로즈 · 마호가니  /  BASE 앰버 · 패출리 · 오크우드", "vision": {"p": "마호가니의 짙고 부드러운 갈색", "t": "Dark · Golden"}, "sound": {"p": "고요한 사찰의 정적", "t": "Hushed · Resonance"}, "touch": {"p": "물기 머금은 나무둥치의 결", "t": "Textured · Resinous"}, "taste": {"p": "따뜻하게 남는 달콤 쌉쌀함", "t": "Bittersweet"}, "easy": "고요한 사찰 한켠에서 물기 머금은 나무둥치를 마주한 듯, 차분하고 깊은 나무 향이에요.", "pro": "그라스와 올리바넘의 클린한 오프닝, 로즈가 스친 마호가니 우드 하트, 앰버와 패출리의 따뜻한 레지너스 베이스입니다.", "foot": ""}, "LATE AUTUMN": {"concept": "비터오렌지와 사탕수수 풀내음", "notes": "TOP 갈바넘 · 부쿠  /  MIDDLE 사탕수수 · 약쑥  /  BASE 시더우드 · 머스크", "vision": {"p": "늦가을 오후의 마른 풀빛", "t": "Muted · Golden"}, "sound": {"p": "낙엽길을 걷는 잔잔한 리듬", "t": "Legato"}, "touch": {"p": "서늘한 공기, 마른 풀", "t": "Dry · Crisp"}, "taste": {"p": "비터오렌지와 사탕수수의 달콤 쌉쌀함", "t": "Bittersweet · Zesty"}, "easy": "늦가을 산책길, 쌉쌀한 오렌지 껍질과 사탕수수 풀내음이 서늘한 공기에 섞이는 향이에요.", "pro": "갈바넘과 부쿠의 그린한 오프닝, 사탕수수와 약쑥의 비터스위트한 하트, 시더우드와 머스크의 드라이한 베이스입니다.", "foot": ""}, "BOTTARI": {"concept": "매듭 지은 보따리가 펼쳐지는 여정", "notes": "TOP 아키갈라우드  /  MIDDLE 암브록산 · 암브레트  /  BASE 앰버그리스 · 머스크 · 모스", "vision": {"p": "안개 낀 숲에서 호박빛으로", "t": "Hazy · Shadowy → Golden"}, "sound": {"p": "매듭이 풀리듯 번지는 울림", "t": "Crescendo · Resonance"}, "touch": {"p": "젖은 이끼에서 따스한 결로", "t": "Dewy · Mineral → Skin-like"}, "taste": {"p": "흙내음 어린 깊은 맛", "t": "Savory"}, "easy": "꽁꽁 묶인 보따리를 하나씩 풀듯, 서늘한 나무와 젖은 이끼를 지나 따뜻한 앰버가 퍼져요.", "pro": "쿨한 우디 오프닝에서 모시하고 어시한 하트로 변주되고, 앰버 머스크가 넓게 확산되며 길게 남습니다.", "foot": ""}, "PUMKINI": {"concept": "진득한 호박에 진저의 스파이시함", "notes": "달콤한 호박 · 차조기잎 · 코코넛 밀크", "vision": {"p": "잘 익은 호박색", "t": "Golden"}, "sound": {"p": "통통 튀는 진저", "t": "Staccato · Vibrant"}, "touch": {"p": "진득하고 크리미한", "t": "Creamy · Plush"}, "taste": {"p": "코코넛 밀크의 디저트", "t": "Gourmand · Lactonic · Spicy"}, "easy": "잘 여문 호박에 생강 한 꼬집, 코코넛 밀크로 감싼 따뜻한 디저트 같은 향이에요.", "pro": "스파이시한 진저가 구르망 호박에 긴장을 주고, 코코넛 밀크가 우유처럼 크리미한 잔상을 남깁니다.", "foot": ""}, "BLUE HINOKI": {"concept": "햇살 아래의 바다", "notes": "TOP 파인오일 · 베르가못 · 히비스커스  /  MIDDLE 워터 · 히노키  /  BASE 시더우드 · 드리프트우드 · 올리바넘", "vision": {"p": "햇살에 반짝이는 푸른 해변", "t": "Crystalline · Luminous"}, "sound": {"p": "파도의 리듬, 고요한 파동", "t": "Resonance · Echo"}, "touch": {"p": "바람의 결과 단단한 나무", "t": "Airy · Textured"}, "taste": {"p": "짭조름한 바다 공기", "t": "Salty"}, "easy": "히노키 나무가 바다로 흘러가 파도를 만난 듯, 짭조름한 바람과 단단한 나무가 교차해요.", "pro": "파인과 베르가못의 브라이트한 오프닝, 솔티한 마린 어코드와 히노키 우드, 올리바넘의 서늘한 레조넌스로 이어집니다.", "foot": ""}, "SUNSHINE": {"concept": "햇살 속 숲을 달리는 자유", "notes": "TOP 안젤리카 · 솔티 미네랄  /  MIDDLE 뮤게 · 자스민 · 인센스  /  BASE 가이악우드 · 캐시메란 · 머스크", "vision": {"p": "숲 사이로 쏟아지는 은빛 햇살", "t": "Sun-drenched · Luminous"}, "sound": {"p": "숲을 내달리다 고요한 밤으로", "t": "Vibrant → Hushed"}, "touch": {"p": "구름처럼 가볍고 캐시미어처럼 부드러운", "t": "Airy · Plush"}, "taste": {"p": "짭짤한 흙내음", "t": "Salty"}, "easy": "햇살이 쏟아지는 숲속을 자유롭게 달리다, 맑은 가을 밤의 고요로 내려앉는 향이에요.", "pro": "안젤리카와 솔티 미네랄의 그린한 오프닝, 인센스가 스친 뮤게와 자스민 하트, 가이악우드와 캐시메란의 부드러운 머스크 베이스입니다.", "foot": ""}, "PUPPY": {"concept": "햇살 아래 낮잠 자는 강아지", "notes": "TOP 포 어코드 · 블루 카모마일 · 루미너스 알데하이드  /  MIDDLE 클라리세이지 · 미르  /  BASE 시더우드 · 드라이우드 · 앰브록스", "vision": {"p": "햇살 아래 낮잠 자는 강아지", "t": "Luminous · Glowing"}, "sound": {"p": "새근새근 숨소리", "t": "Whisper · Hushed"}, "touch": {"p": "보드라운 털의 포근함", "t": "Plush · Skin-like"}, "taste": {"p": "허브티처럼 맑은 끝맛", "t": "Tea-like"}, "easy": "햇살 아래 낮잠 자는 강아지를 꼭 안은 듯, 포근하고 다정한 향이에요.", "pro": "포 어코드와 루미너스 알데하이드의 밝은 오프닝, 블루 카모마일과 클라리세이지의 허벌 하트, 드라이우드와 앰브록스의 부드러운 베이스입니다.", "foot": "※ 향 노트는 공식 홈페이지 '퍼퓸 본 퍼피' 기준"}, "UNKNOWN OUD": {"concept": "그을린 나무 위에서 만나는 낯선 조합", "notes": "유칼립투스 · 라즈베리 · 그을린 나무", "vision": {"p": "그을린 나무의 어둠에 붉은 점 하나", "t": "Dark · Chiaroscuro"}, "sound": {"p": "낯설지만 끌리는 화음", "t": "Dissonance"}, "touch": {"p": "서늘한 잎과 그을린 결", "t": "Crisp · Textured"}, "taste": {"p": "라즈베리의 새콤함과 스모키한 뒷맛", "t": "Tart · Smoky"}, "easy": "서늘한 유칼립투스와 붉은 라즈베리가 그을린 나무 위에서 만나는, 낯설고 매력적인 향이에요.", "pro": "서늘한 유칼립투스와 주시한 라즈베리가 스모키한 우드와 대비를 이루는, 의도된 디소넌스가 매력인 구성입니다.", "foot": "※ 세부 탑 · 미들 · 베이스 노트는 공식 상세 페이지에서 확인 필요"}, "MEOK": {"concept": "삼청 플래그십 전용, 서예의 먹에서 받은 깨끗하고 정제된 분위기", "notes": "나무의 그을음 · 기름의 묵직함", "vision": {"p": "먹빛, 하나의 톤", "t": "Monochrome · Smoky"}, "sound": {"p": "붓이 종이를 스치는 사각거림", "t": "Hushed"}, "touch": {"p": "벼루처럼 매끄럽고 마른", "t": "Smooth · Dry"}, "taste": {"p": "스모키한 뒷맛", "t": "Smoky · Dry"}, "easy": "먹을 가는 고요한 시간처럼, 그을린 나무와 묵직한 기름의 결이 정갈하게 번져요.", "pro": "스모키하고 드라이한 우디. 모노크롬처럼 절제된 톤의 레지너스한 깊이가 있습니다.", "foot": "※ 향 설명은 프라이빗 서비스 기획안 3층 스크립트 기준"}};
+const SLAB={vision:['시각','향의 온도','#8A5A12'],sound:['청각','향의 움직임','#27547F'],touch:['촉각','향의 질감','#3E6B2E'],taste:['미각','향의 잔향','#9A3B28']};
+
+function openLang(s){var d=LANG[(s||'').toUpperCase()];if(!d)return;
+ var e=function(x){return (x==null?'':String(x)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+ var h='<div class="langh"><button class="langx" aria-label="닫기">×</button><div class="lt">TAMBURINS 향의 언어</div><h3>'+e(s)+'</h3><div class="lc">'+e(d.concept)+'</div><div class="ln2">'+e(d.notes)+'</div></div><div class="langb">';
+ ['vision','sound','touch','taste'].forEach(function(k){var L=SLAB[k];var x=d[k];h+='<div class="lrow" style="border-color:'+L[2]+'"><div class="ll" style="color:'+L[2]+'">'+L[0]+' · '+L[1]+'</div><div class="lp">'+e(x.p)+'</div><div class="le">'+e(x.t)+'</div></div>';});
+ h+='<div class="lbox" style="background:#eef4e6;border:1px solid #d9e6c6"><div class="lbl" style="color:#4a6b2e">쉬운 말 · EXPLORER · AESTHETE</div><div class="lbt">'+e(d.easy)+'</div></div>';
+ h+='<div class="lbox" style="background:#eef1f8;border:1px solid #d4ddee"><div class="lbl" style="color:#345">향수 용어 · SCENT LOVER</div><div class="lbt">'+e(d.pro)+'</div></div>';
+ if(d.foot)h+='<div class="lfoot">'+e(d.foot)+'</div>';
+ h+='<div style="text-align:center;margin-top:14px"><a href="./scent-language.html" style="font-size:11.5px;color:#b08968;text-decoration:none">향의 언어 전체 보기 →</a></div>';
+ h+='</div>';
+ var m=document.getElementById('langm');m.innerHTML=h;var ov=document.getElementById('langov');ov.classList.add('on');
+ m.querySelector('.langx').onclick=closeLang;ov.onclick=function(ev){if(ev.target===ov)closeLang();};}
+function closeLang(){document.getElementById('langov').classList.remove('on');}
+
 function renderScent(s,fam){
   CLICKED=[];popHidden=false;hideKwPop();homeEl.classList.remove('on');vp.classList.add('on');hint.classList.remove('hide');
   resetView();clearStage();
@@ -452,10 +484,11 @@ function renderScent(s,fam){
   let pi=list.find(i=>P[i].type==='프래그런스');if(pi===undefined)pi=(byScent[s]||[]).find(i=>P[i].type==='프래그런스');if(pi===undefined)pi=list[0];
   const pp=(pi!==undefined)?P[pi]:null;
   const c=document.createElement('div');c.className='node scentC';
-  c.innerHTML=(pp?pdisc(pp):'')+`<div class="sub ttl">SCENT</div><div class="big accbig" title="어코드 가이드에서 보기">${esc(s)}</div><div class="acclink">어코드 가이드에서 보기 →</div>`;
+  c.innerHTML=(pp?pdisc(pp):'')+`<div class="sub ttl">SCENT</div><div class="big accbig" title="어코드 가이드에서 보기">${esc(s)}</div><div class="acclink">어코드 가이드에서 보기 →</div>${LANG[(s||'').toUpperCase()]?'<div class="langlink">향의 언어 보기 →</div>':''}`;
   const accId=FAM2ACC[fam]||'';const accUrl='./accord.html?p='+encodeURIComponent(s)+(accId?('&acc='+accId):'');
   const goAcc=(e)=>{if(e)e.stopPropagation();location.href=accUrl;};
   c.querySelector('.accbig').onclick=goAcc;c.querySelector('.acclink').onclick=goAcc;
+  var _ll=c.querySelector('.langlink');if(_ll)_ll.onclick=function(e){e.stopPropagation();openLang(s);};
   place(c,0,0);
   const pobs=[];
   // keywords scattered like a mind map (겹침 방지)
@@ -588,4 +621,5 @@ document.getElementById('kwpopX').onclick=()=>{hideKwPop();CLICKED=[];};
 document.getElementById('fbSaveBtn').onclick=()=>fbSave(false);
 fbInit(()=>navigate({view:'home',mode:'판매중'},undefined));
 </script>
+<div class="langov" id="langov"><div class="langm" id="langm"></div></div>
 </body></html>
